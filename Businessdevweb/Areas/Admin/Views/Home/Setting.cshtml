@@ -1,0 +1,207 @@
+﻿@model Businessdevweb.Models.Setting
+
+@{
+    ViewBag.Title = "تنظیمات صفحه اصلی";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Title -->
+<div class="row heading-bg pull-left rtl">
+
+    <!-- Breadcrumb -->
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+        <ol class="breadcrumb">
+            <li></li>
+            <li><a href="@Url.Action("Index","Dashboard",new { area = "Admin" })"><span>داشبورد</span></a></li>
+            <li class="active"><span>@ViewBag.Title </span></li>
+        </ol>
+    </div>
+    <!-- /Breadcrumb -->
+</div>
+<!-- /Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default card-view">
+            <div class="panel-heading">
+                <div class="pull-left">
+                    <h5 class="txt-dark">@ViewBag.Title </h5>
+
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-wrapper collapse in">
+                <div class="panel-body">
+                    <div class="form-wrap">
+                        <div class=" col-sm-12">
+
+                            <form class="ajaxForm" success-func="changeSuccess" id="form_Brand@(Model.Id)" action="/Admin/Home/ChangePicture" data-autoReset="false" enctype="multipart/form-data" method="post">
+
+                                <input type="hidden" value="@Model.Id" name="id" />
+
+                                <p>لوگوی سایت</p>
+                                <div style="width: 200px !important; height: 80px !important; display: block">
+
+
+                                    <input data-show-loader="false" data-show-remove="false" type="file" name="file"
+                                           for="form_Brand@(Model.Id)" class="dropify" data-default-file="@(Model.LogoFile==null?"":"/Content/uploadFiles/Site/"+Model.LogoFile)" />
+                                    <input type="submit" id="form_Brand@(Model.Id)_btn" style="display:none" />
+                                </div>
+                            </form>
+
+                        </div>
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                @Html.ValidationSummary("", htmlAttributes: new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.Title, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.Description, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+
+                                @Html.TextAreaFor(m => m.Description, htmlAttributes: new { @class = "form-control" })
+
+                            </div>
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.Copyright, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.Copyright, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.DescriptionCall, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.DescriptionCall, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.Email, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.LogoTitle, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.LogoTitle, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.Phone, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.Phone, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <button type="submit" class="btn btn-success btn-anim"><i class="icon-rocket"></i><span class="btn-text">ذخیره</span></button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Row -->
+@section Styles{
+
+    <!-- Bootstrap Dropify CSS -->
+    <link href="~/Content/lib/dropify/dist/css/dropify.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .file-icon:before {
+            margin: 0 !important;
+            padding: 0
+        }
+
+        .dropify-message {
+            -webkit-transform: translateY(0%) !important;
+            transform: translateY(0%) !important;
+        }
+    </style>
+    <link href="~/Content/lib/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css">
+}
+@section Scripts{
+    <script>
+
+    </script>
+    <script>
+
+ 
+    <script src="~/Content/js/dataTables-data.js"></script>
+    <!-- Bootstrap Daterangepicker JavaScript -->
+    <script src="~/Content/lib/dropify/dist/js/dropify.min.js"></script>
+
+    <!-- Form Flie Upload Data JavaScript -->
+    <script src="~/Content/js/form-file-upload-data.js"></script>
+    <script src="~/Content/lib/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="~/Content/js/AjaxHelper.js"></script>
+    <script>
+        $('.dropify').dropify({
+            tpl: {
+                wrap: '<div class="dropify-wrapper" style="padding:0; height:auto !important"></div>',
+                loader: '',
+                message: '<div class="dropify-message"><span class="file-icon" /></div>',
+                preview: '<div class="dropify-preview"><span class="dropify-render"></span></div>',
+                filename: '',
+                clearButton: '',
+                errorLine: '',
+                errorsContainer: ''
+            }
+        });
+
+    </script>
+    <script>
+
+        function changeSuccess(data) {
+
+            //examples
+            if (data.type == "success") {
+                swal({
+                    title: "آفرین!",
+                    type: "success",
+                    text: data.result,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            } else {
+                swal({
+                    title: "خطا!",
+                    type: "error",
+                    text: data.result,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+            return false;
+        }
+
+        var elements = document.querySelectorAll(".dropify[name=file]");
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].addEventListener("change",
+                function (eve) {
+
+
+
+                    let el = eve.currentTarget;
+                    let form = el.getAttribute("for");
+                    eve.preventDefault();
+                    document.getElementById(form + "_btn").click();
+
+                });
+        }
+
+
+
+
+    </script>
+}

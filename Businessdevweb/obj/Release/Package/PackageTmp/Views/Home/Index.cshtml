@@ -1,0 +1,320 @@
+﻿@model List<Businessdevweb.Models.ProductCategory>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var products = (List<Businessdevweb.Models.Product>)ViewBag.Products;
+}
+<div class="mdl-grid mdl-color--grey-100">
+    <div class="mdl-cell mdl-cell--8-col">
+        <div class="mdl-grid">
+            @if (Model.Count > 0)
+            {
+
+                foreach (var itemParent in Model.OrderByDescending(m => m.Visit).ToList())
+                {
+                    <div class="mdl-cell mdl-cell--12-col mdl-shadow--4dp mdl-color--red">
+                        <div style="display:inline-block;width:75px">
+                            @{
+                                if (itemParent.SelectedImages.Count > 0)
+                                {
+                                    var pic = (from i in itemParent.SelectedImages
+                                               where i.Position == "Primary"
+                                               select new
+                                               {
+                                                   i.Image.Path,
+                                                   i.Image.Title,
+                                                   i.Image.Alt,
+                                                   i.Image.Ext,
+                                                   i.Image.Name
+                                               }).FirstOrDefault();
+                                    if (pic != null)
+                                    {
+                            <picture>
+
+                                <source srcset="@(pic.Path + "icon/" + pic.Name + pic.Ext)">
+                                <img src="" style="height:auto;width:75px" title="@pic.Title" alt="@pic.Alt" />
+                            </picture>
+
+                                    }
+                                    else
+                                    {
+                            <img src="~/Content/NoPic.jpg" style="height:auto;width:inherit" title="@itemParent.Title" alt="@itemParent.Title">
+                                    }
+
+                                }
+                                else
+                                {
+                            <img src="~/Content/NoPic.jpg" style="height:auto;width:inherit" title="@itemParent.Title" alt="@itemParent.Title">
+                                }
+                            }
+                        </div>
+                        <h2 class="mdl-color-text--white" style="display:inline-block;vertical-align:middle;line-height:50px;font-size:larger;padding-right:10px;margin:0;">
+                            @itemParent.Title <a href="~/Products/@(itemParent.Name)" style="text-decoration:unset;color:white">بیشتر</a>
+                        </h2>
+                    </div>
+
+                                if (itemParent.Categories.Count > 0)
+                                {
+
+
+                                    <div class="mdl-cell mdl-cell--12-col " >
+                                        <div class="mdl-grid autoplayProductCategories mdl-color--white" style="margin:unset;padding:unset">
+                                            @foreach (var item in itemParent.Categories.OrderByDescending(m=>m.Visit).Take(9))
+                                            {
+
+                                            <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp" style="min-height:0;height:auto;display:block;">
+                                                <div class="mdl-card__title" style="padding:unset">
+                                                    <div style="position:relative;right:0;top:0;display:block;width:100%">
+                                                        @{
+                                                            if (item.SelectedImages.Count > 0)
+                                                            {
+                                                                var pic = (from i in item.SelectedImages
+                                                                           where i.Position == "Primary"
+                                                                           select new
+                                                                           {
+                                                                               i.Image.Path,
+                                                                               i.Image.Title,
+                                                                               i.Image.Alt,
+                                                                               i.Image.Ext,
+                                                                               i.Image.Name
+                                                                           }).FirstOrDefault();
+                                                                if (pic != null)
+                                                                {
+                                                                    <picture>
+                                                                        <!--<source srcset="Content/GoldLogo.png" media="(max-width: 1024px) ">-->
+                                                                        <source srcset="@(pic.Path + "desktop/" + pic.Name + pic.Ext)" media="(min-width: 760px) ">
+                                                                        <source srcset="@(pic.Path + "phone/" + pic.Name + pic.Ext)" media="(min-width: 180px)">
+                                                                        <img src="" style="height:auto;width:100%" title="@pic.Title" alt="@pic.Alt" />
+                                                                    </picture>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <img src="~/Content/NoPic.jpg" style="height:auto;width:inherit" title="@item.Title" alt="@item.Title">
+                                                                }
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Content/NoPic.jpg" style="height:auto;width:inherit" title="@item.Title" alt="@item.Title">
+                                                            }
+                                                        }
+                                                    </div>
+                                                    <h3 class="mdl-card__title-text" style="font-size:15px;position:absolute;right:5px;bottom:0;text-shadow:2px 2px 2px white">
+                                                        @item.Title
+                                                    </h3>
+                                                    <div class="mdl-card__menu">
+                                                        <a href="~/Products/@(item.Name)" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect " style="background-color:rgba(0, 0, 0, 0.10)">
+                                                            <i class="material-icons mdl-color-text--white">more_vert</i>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            }
+
+                                        </div>
+                                    </div>
+
+                                        }
+
+                                    }
+                                }
+
+        </div>
+    </div>
+
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-desktop">
+        <div class="mdl-grid ">
+            <style>
+                .sospcs-card__media {
+                    display: inline-block;
+                    width: 100px;
+                }
+
+                .sospcs-card__title {
+                    padding: unset;
+                    line-height: 25px;
+                    display: inline-block;
+                    width: calc(100%-100px);
+                    overflow: hidden;
+                }
+            </style>
+            @if (products.Count > 0)
+            {
+                foreach (var item in products.OrderByDescending(m=>m.Visit))
+                {
+                        <div class="mdl-cell mdl-cell--12-col mdl-card  mdl-color--grey-50 mdl-shadow--4dp" style="min-height:0;height:auto;display:block">
+                            <div class="mdl-grid mdl-grid--no-spacing">
+                                <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet" style="border-bottom:1px solid rgba(0, 0, 0, 0.20);max-height:60px">
+                                    <div class="mdl-card__media sospcs-card__media">
+                                        @{
+                                            if (item.SelectedImages.Count() > 0)
+                                            {
+                                                var pic = (from i in item.SelectedImages
+                                                           where i.Position == "Main"
+                                                           select new
+                                                           {
+                                                               i.Image.Path,
+                                                               i.Image.Title,
+                                                               i.Image.Alt,
+                                                               i.Image.Ext,
+                                                               i.Image.Name
+                                                           }).FirstOrDefault();
+                                                if (pic != null)
+                                                {
+                                                    <picture>
+                                                        <!--<source srcset="Content/GoldLogo.png" media="(max-width: 1024px) ">-->
+                                                        <source srcset="@(pic.Path  + pic.Name + pic.Ext)" media="(min-width: 760px) ">
+                                                        <source srcset="@(pic.Path  + pic.Name + pic.Ext)" media="(min-width: 180px)">
+                                                        <img src="" style="height:auto;width:100%" title="@pic.Title" alt="@pic.Alt" />
+                                                    </picture>
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@item.FirstTitle" alt="@item.FirstTitle">
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@item.FirstTitle" alt="@item.FirstTitle">
+                                            }
+                                        }
+                                    </div>
+                                    <div class="mdl-card__title sospcs-card__title">
+                                        <h4 class="mdl-card__title-text" style="font-size:15px;padding:0 3px;"><a href='~/Product/@(((item.SecondTitle!=null)?item.SecondTitle.Replace(" ","-").Replace("/","").Replace(".","")+"/":"")+item.Name)' style="text-decoration:none;color:black">@(item.FirstTitle.Substring(0, (item.FirstTitle.Length > 40) ? 40 : item.FirstTitle.Length))</a></h4>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--12-col mdl-card__supporting-text mdl-cell--hide-desktop mdl-cell--hide-phone">
+                                    <span>
+                                        قیمت برای شما:
+                                    </span>
+                                    <span>
+                                        @((item.Prices != null && item.Prices.Count > 0) ? item.Prices.OrderBy(m => m.InsertTime).LastOrDefault().Price.ToString() + " ريال" : "بزودی")
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                                                }
+                                            }
+
+        </div>
+
+    </div>
+</div>
+<div class="mdl-grid mdl-grid--no-spacing">
+    <div class="mdl-cell mdl-cell--12-col mdl-color--white">
+        @{var pdt = products.FirstOrDefault();
+            <div class="mdl-grid mdl-grid--no-spacing">
+                <div class="mdl-cell mdl-cell--6-col">
+                    @{
+                        if (pdt.SelectedImages.Count > 0)
+                        {
+                            var pic = (from i in pdt.SelectedImages
+                                       where i.Position == "Main"
+                                       select new
+                                       {
+                                           i.Image.Path,
+                                           i.Image.Title,
+                                           i.Image.Alt,
+                                           i.Image.Ext,
+                                           i.Image.Name
+                                       }).FirstOrDefault();
+                            if (pic != null)
+                            {
+                                <picture>
+                                    <!--<source srcset="Content/GoldLogo.png" media="(max-width: 1024px) ">-->
+                                    <source srcset="@(pic.Path  + pic.Name + pic.Ext)" media="(min-width: 760px) ">
+                                    <source srcset="@(pic.Path  + pic.Name + pic.Ext)" media="(min-width: 180px)">
+                                    <img src="" style="height:auto;width:100%" title="@pic.Title" alt="@pic.Alt" />
+                                </picture>
+                            }
+                            else
+                            {
+                                <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@pdt.FirstTitle" alt="@pdt.FirstTitle">
+                            }
+                        }
+                        else
+                        {
+                            <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@pdt.FirstTitle" alt="@pdt.FirstTitle">
+                        }
+                    }
+                </div>
+                <div class="mdl-cell mdl-cell--6-col" style="text-align: center;display: table;">
+                    <div style="text-align:center;margin:100px 10px 10px 10px;">
+                        <h2>
+                            @pdt.FirstTitle
+                        </h2>
+                        <h4>
+                            <span>
+                                قیمت برای شما:
+                            </span>
+                            <span>
+                                @((pdt.Prices.Count > 0) ? pdt.Prices.OrderBy(m => m.InsertTime).LastOrDefault().Price.ToString() + " ريال" : "بزودی")
+                            </span>
+                        </h4>
+                        <a href='~/Product/@(((pdt.SecondTitle!=null)?pdt.SecondTitle.Replace(" ","-").Replace("/","").Replace(".","")+"/":"")+pdt.Name)'
+                            class="mdl-button mdl-button--accent mdl-button--raised mdl-js-button mdl-js-ripple-effect">جزئیات</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+@section Banners{
+
+
+    @{if (ViewBag.Banners != null)
+        {
+            Html.RenderPartial("~/Views/Shared/_PartialBanners.cshtml", (List<Businessdevweb.Models.BannerSlider>)ViewBag.Banners);
+        }
+    }
+
+}
+@section AboutMe{
+    @if (ViewBag.AboutMe != null)
+    {
+        Html.RenderPartial("~/Views/Shared/_PartialAboutMe.cshtml", (List<Businessdevweb.Models.Page>)ViewBag.AboutMe);
+
+    }
+
+}
+@section Footer{
+    @{Html.RenderPartial("~/Views/Shared/_PartialFooter.cshtml");}
+
+}
+
+    @section styles{
+        @Styles.Render("~/Content/Slider")
+    }
+    @section scripts{
+        @Scripts.Render("~/bundles/Slider")
+        <script>
+
+            $('.autoplay').slick({
+                dots: true,
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                rtl: true,
+
+            });
+        </script>
+        <script>
+
+            $('.autoplayProductCategories').slick({
+                dots: false,
+                infinite: true,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 4000,
+                rtl: true,
+
+            });
+        </script>
+    }

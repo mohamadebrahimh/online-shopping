@@ -1,0 +1,114 @@
+﻿@model Businessdevweb.Models.ProductCategory
+
+@{
+    ViewBag.Title = "ویرایش دسته "+Model.Title;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Title -->
+<div class="row heading-bg pull-left rtl">
+
+    <!-- Breadcrumb -->
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+        <ol class="breadcrumb">
+            <li></li>
+            <li><a href="@Url.Action("Index","Dashboard",new { area = "Admin" })"><span>داشبورد</span></a></li>
+            <li><a href="@Url.Action("Index","ProductCategories",new { area="Admin",id=Model==null?null:Model.ParentId})"><span>@(Model.ParentId==null?"مدیریت دسته بندی":"دسته های "+Model.Parent.Title)  </span></a></li>
+            <li class="active"><span>@ViewBag.Title </span></li>
+        </ol>
+    </div>
+    <!-- /Breadcrumb -->
+</div>
+<!-- /Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default card-view">
+            <div class="panel-heading">
+                <div class="pull-left">
+                    <h5 class="txt-dark">@ViewBag.Title </h5>
+
+                </div>
+                <div class="pull-right dt-buttons">
+                    <a class="dt-button" href="@Url.Action("Index","ProductCategories",new {id=Model.ParentId, Area="Admin"})"> دسته بندی محصولات</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-wrapper collapse in">
+                <div class="panel-body">
+                    <div class="form-wrap">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                @Html.ValidationSummary("", htmlAttributes: new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Code, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @class = "form-control" ,@readonly="readonly"})
+
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Title, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextBoxFor(m => m.Name, htmlAttributes: new { @class = "form-control" ,@readonly="readonly"})
+
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Description, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+
+                                @Html.TextAreaFor(m => m.Description, htmlAttributes: new { @class = "form-control" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.MetaDescription, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextAreaFor(m => m.MetaDescription, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.MetaKeyWord, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                @Html.TextAreaFor(m => m.MetaKeyWord, htmlAttributes: new { @class = "form-control" })
+
+
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ParentId, htmlAttributes: new { @class = "control-label mb-10" })
+                                @Html.DropDownListFor(m => m.ParentId, (SelectList)ViewBag.ParenId, "انتخاب", htmlAttributes: new { @class = "selectpicker" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.CheckBoxFor(m => m.IsEndChild)
+                                @Html.LabelFor(m => m.IsEndChild)
+                            </div>
+
+
+
+                            <div class="form-group mb-0">
+                                <button type="submit" class="btn btn-success btn-anim"><i class="icon-rocket"></i><span class="btn-text">ذخیره</span></button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Styles{
+    <!-- bootstrap-select CSS -->
+    <link href="~/Content/lib/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+}
+
+@section Scripts{
+    <!-- Bootstrap Select JavaScript -->
+    <script src="~/Content/lib/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+}

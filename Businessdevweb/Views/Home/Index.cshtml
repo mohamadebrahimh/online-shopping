@@ -1,0 +1,231 @@
+﻿
+@{
+    var slider = (Businessdevweb.Models.Slider)ViewData["Slider"];
+    var products = (List<Businessdevweb.Models.Product>)ViewData["Products"];
+    ViewBag.Title = ViewBag.SiteTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var productCategories = (List<Businessdevweb.Models.ProductCategory>)ViewData["ProductCategories"];
+}
+<main class="main default">
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-12 col-lg-12 order-1 order-lg-1">
+                @if (slider != null && slider.SliderImages.Count() > 0)
+                {
+                    <section id="main-slider" class="carousel slide carousel-fade card" data-ride="carousel">
+                        <ol class="carousel-indicators">
+
+
+
+                            @for (var i = 0; i < slider.SliderImages.Count; i++)
+                            {
+                                <li data-target="#main-slider" data-slide-to="@(i)" class="@(i == 0 ? "active" : "")"></li>
+                            }
+
+                        </ol>
+                        <div class="carousel-inner">
+                            @{
+                                var j = 0;
+                                foreach (var item in slider.SliderImages)
+                                {
+
+
+                                    <div class="carousel-item @(j == 0 ? "active" : "")">
+                                        <a class="d-block" href="#">
+                                            <img src="~/Content/uploadFiles/SliderImages/@item.Name"
+                                                 class="d-block w-100" alt="@item.Title">
+                                        </a>
+                                    </div>
+                                    j++;
+                                }
+                            }
+
+                        </div>
+                        <a class="carousel-control-prev" href="#main-slider" role="button" data-slide="prev">
+                            <i class="now-ui-icons arrows-1_minimal-right"></i>
+                        </a>
+                        <a class="carousel-control-next" href="#main-slider" data-slide="next">
+                            <i class="now-ui-icons arrows-1_minimal-left"></i>
+                        </a>
+                    </section>
+                }
+                @{
+                    if (products != null && products.Count() > 0)
+                    {
+                        var amazing = products.Where(m => m.IsActive && m.IsDiscount && m.DiscountPercent > 0).Take(7).ToList();
+                        if (amazing.Count() > 0)
+                        {
+                            var i = 0;
+
+                            <section id="amazing-slider" class="carousel slide carousel-fade card" data-ride="carousel">
+                                <div class="row m-0">
+                                    <ol class="carousel-indicators pr-0 d-flex flex-column col-lg-3">
+                                        @foreach (var item in amazing)
+                                        {
+                                            <li class="@(i == 0 ? "active" : "")" data-target="#amazing-slider" data-slide-to="@i">
+                                                <span>@item.FirstTitle.Substring(0, item.FirstTitle.Length > 15 ? 15 : item.FirstTitle.Length)</span>
+                                            </li>
+                                            i++;
+                                        }
+                                        <li class="view-all">
+                                            <a href="#" class="btn btn-primary btn-block hvr-sweep-to-left">
+                                                <i class="fa fa-arrow-left"></i>مشاهده همه شگفت انگیزها
+                                            </a>
+                                        </li>
+                                    </ol>
+
+                                    <div class="carousel-inner p-0 col-12 col-lg-9">
+                                        <img class="amazing-title" src="~/Content/assets/img/amazing-slider/amazing-title-01.png"
+                                             alt="">
+                                        @{ i = 0;}
+                                        @foreach (var item in amazing)
+                                        {
+                                            <div class="carousel-item @(i == 0 ? "active" : "") @(item.Qty>0?"":" finished ")">
+                                                <div class="row m-0">
+                                                    <div class="right-col col-5 d-flex align-items-center">
+                                                        <a class="w-100 text-center" href="@Url.Action("Index","Products",new { id=item.Name})">
+                                                            <img src="~/Content/uploadFiles/Products/@item.ImageFile"
+                                                                 class="img-fluid" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div class="left-col col-7">
+                                                        <div class="price">
+                                                            <del><span>@item.Price<span>ريال</span></span></del>
+                                                            <ins><span>@item.PriceWithDiscount<span>ريال</span></span></ins>
+                                                            <span class="discount-percent">@item.DiscountPercent % تخفیف</span>
+                                                        </div>
+                                                        <h2 class="product-title">
+                                                            <a href="@Url.Action("Index","Products",new { id=item.Name})"> @item.FirstTitle</a>
+                                                        </h2>
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">برند: @item.Brand</li>
+                                                            @if (item.ProductFeatures.Count() > 0)
+                                                            {
+                                                                <li class="list-group-item">@item.ProductFeatures.Select(m => m.Name + ": " + m.Value).FirstOrDefault()</li>
+
+                                                            }
+                                                        </ul>
+                                                        <hr>
+                                                        @if (item.Qty > 0)
+                                                        {
+                                                            <div class="timer-title"> تعداد باقی مانده @item.Qty تا پایان سفارش</div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="#" class="finished btn"> تمام شد </a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            i++;
+                                        }
+                                    </div>
+
+                                </div>
+                            </section>
+
+                        }
+
+                    } }
+
+                <div class="row banner-ads">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <div class="widget-banner card">
+                                    <a href="#" target="_blank">
+                                        <img class="img-fluid" src="~/Content/assets/img/banner/banner-9.jpg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="widget-banner card">
+                                    <a href="#" target="_top">
+                                        <img class="img-fluid" src="~/Content/assets/img/banner/banner-10.jpg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (productCategories != null)
+                {
+                    foreach (var item in productCategories.Take(5))
+                    {
+                        if (item.Products != null && item.Products.Count() > 0)
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="widget widget-product card">
+                                        <header class="card-header">
+                                            <h3 class="card-title">
+                                                <span>@item.Title</span>
+                                            </h3>
+                                            <a href="@Url.Action("Category","Products",new { id=item.Name})" class="view-all">مشاهده همه</a>
+                                        </header> <div class="product-carousel owl-carousel owl-theme">
+                                            @foreach (var p in item.Products.Take(7))
+                                            {
+
+
+                                                <div class="item">
+                                                    <a href="@Url.Action("Index","Products",new { id=p.Name})">
+                                                        <img src="~/Content/uploadFiles/Products/@p.ImageFile"
+                                                             class="img-fluid" alt="@p.FirstTitle">
+                                                    </a>
+                                                    <h2 class="post-title">
+                                                        <a href="@Url.Action("Index","Products",new { id=p.Name})">@p.FirstTitle</a>
+                                                    </h2>
+                                                    <div class="price">
+                                                        @if (p.IsDiscount)
+                                                        {
+                                                            <div class="text-center">
+                                                                <del><span>@(p.Price)<span>ريال</span></span></del>
+                                                            </div>
+
+                                                        }
+
+                                                        <div class="text-center">
+                                                            <ins><span>@(p.IsDiscount && p.DiscountPercent > 0 ? p.PriceWithDiscount : p.Price)<span>ريال</span></span></ins>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                    }
+
+                }
+
+
+
+                <div class="row banner-ads">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="widget widget-banner card">
+                                    <a href="#" target="_blank">
+                                        <img class="img-fluid" src="~/Content/assets/img/banner/banner-11.jpg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</main>

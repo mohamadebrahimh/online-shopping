@@ -1,0 +1,38 @@
+﻿@model List<Businessdevweb.Models.ProductCategory>
+
+@{
+    ViewBag.Title = "دسته بندی محصولات";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <div class="mdl-cell mdl-cell--12-col">
+                <a href='@Url.Action("Create")' class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect"><i class="material-icons">add</i> افزودن دسته</a>
+                <a href='@Url.Action("Index","Products")' class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect"><i class="material-icons">list</i> لیست محصولات</a>
+            </div>
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <ul class="tree">
+                    @Html.Raw(ViewBag.tree)
+                </ul>
+                </div>
+            </div>
+
+    </div>
+</div>
+
+@section scripts{
+<script src="~/Scripts/jquery.treegrid.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.tree').treegrid({
+                expanderTemplate: '<i class="treegrid-expander"></i>',
+                expanderExpandedClass: 'material-icons',
+                expanderCollapsedClass: 'material-icons'
+            }).treegrid('collapseAll');
+
+        });</script>
+    }

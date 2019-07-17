@@ -1,0 +1,326 @@
+﻿@model IEnumerable<Businessdevweb.Models.Product>
+
+@{
+    ViewBag.Title = "محصولات دسته " + ViewData["CategoryTitle"];
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <style>
+        .mask {
+            background: white;
+            opacity: 0.7;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index: 1000;
+        }
+
+        .load {
+            position: absolute;
+            display: block;
+            width: 280px; /*image width */
+            height: 150px; /*image height */
+            top: 25%;
+            right: calc(50% - 140px);
+            display: none;
+            z-index: 1001;
+        }
+    </style>
+}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <div class="mdl-cell mdl-cell--12-col">
+                <a href='@Url.Action("Create","Products",new {Id=ViewData["CategoryId"] })' class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect"><i class="material-icons">add</i>افزودن محصول</a>
+                <a href='@Url.Action("Index","Products")' class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect"><i class="material-icons">list</i>محصولات</a>
+            </div>
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <ul class="mdl-grid" style="list-style:none;list-style-type:none">
+                    @foreach (var item in Model)
+                    {
+                        var pic = "";
+                        if (item.SelectedImages != null)
+                        {
+                            var img = item.SelectedImages.FirstOrDefault(m => m.Position == "Icon");
+                            if (img != null)
+                            {
+                                pic = img.Image.Path + img.Image.Name + img.Image.Ext;
+                            }
+                        }
+
+                        <li class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone mdl-color--white  mdl-shadow--2dp" style="height:50px!important;display:block;position:relative">
+                            <div style="height:50px;display:inline-block;">
+                                @if (pic == "")
+                                {
+                                    <button id="@("btn"+item.Id)" type="button" onclick='showDialog("@item.Id");' class="mdl-color--grey-100 mdl-button" style="height:50px;width:50px;min-height:50px;min-width:50px;padding:0;margin:unset ">
+                                        <i class="material-icons mdl-color-text--blue-grey-300" style="font-size:30px;vertical-align:middle">photo</i>
+                                    </button>
+
+                                }
+                                else
+                                {
+
+                                    <img src="@(pic)" alt="@item.FirstTitle" title="@item.FirstTitle" height="50" width="50" />
+                                }
+
+
+                            </div>
+                            <div style="position:absolute;height:50px;padding-right:3px;right:50px;left:20px;display:inline-block">
+                                <div style="position:absolute;display:block; top:0;height:25px;line-height:25px;font-size:small ">
+                                    <span>@Html.DisplayNameFor(m => m.FirstTitle): @item.FirstTitle</span>
+                                    <span class="mdl-color-text--grey-500" style="padding-right:5px"></span>
+                                </div>
+                                <div class="mdl-color-text--grey-500" style="position:absolute;display:block; top:25px;height:25px;line-height:25px;font-size:small ">
+                                    <span>@Html.DisplayNameFor(m => m.SecondTitle): @item.SecondTitle</span>
+                                </div>
+                            </div>
+
+                            <div id="@item.Id" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="padding:0 0 0 10px    ;position:absolute; height :50px;min-width:unset;width:20px!important;left:0px;display:inline-block;">
+                                <i class="material-icons" style="line-height:50px;font-size:30px;display:block">more_vert</i>
+                            </div>
+                            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+                                for="@item.Id">
+                                <li>@Html.ActionLink("ویرایش محصول", "Edit", "Products", new { id = item.Id }, new { @class = "mdl-menu__item" })</li>
+                                <li>@Html.ActionLink("حذف محصول", "Delete", "Products", new { id = item.Id }, new { @class = "mdl-menu__item mdl-menu__item--full-bleed-divider" })</li>
+                                <li>@Html.ActionLink("مشخصات فنی", "ProductFeatures", "Products", new { id = item.Id }, new { @class = "mdl-menu__item" })</li>
+                                <li>@Html.ActionLink("لیست قیمت", "ProductPrices", "Products", new { id = item.Id }, new { @class = "mdl-menu__item" })</li>
+                                <li><a class="mdl-menu__item" onclick='AddPrice("@item.Id");'>قیمت جدید</a></li>
+                                <li><a class="mdl-menu__item" onclick='colorList("@item.Id");'>تعیین رنگ</a></li>
+                                <li>@Html.ActionLink("تصویر پیش نمایش", "ImageUpload", "Products", new { id = item.Id}, new { @class = "mdl-menu__item" })</li>
+                                <li>@Html.ActionLink("تصاویر با زوم", "ImageUpload", "Images", new { id = item.Id, TEntity = "Product" }, new { @class = "mdl-menu__item" })</li>
+                                <li><a class="mdl-menu__item" href='/Products/Details/@(item.Category.Name+"/"+ item.Name)' target="_blank">نمایش</a></li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<dialog class="mdl-dialog"></dialog>
+<div id="fileUploader" style="display:none">
+    <h4 class="mdl-dialog__title">بارگذاری تصویر</h4>
+    <form id="formFile">
+        <div class="mdl-dialog__content">
+
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="hidden" name="id" id="valId" value="" />
+                <input type="hidden" name="TEntity" id="TEntity" value="" />
+                <input class="mdl-textfield__input" type="file" id="file" name="file" accept="image/*">
+                <p class="message"></p>
+            </div>
+
+        </div>
+        <div class="mdl-dialog__actions">
+
+            <button type="button" onclick="formSubmit();" class="mdl-button">بارگذاری</button>
+            <button type="reset" class="mdl-button">حالت اولیه</button>
+            <button type="button" class="mdl-button close">انصراف</button>
+        </div>
+    </form>
+</div>
+@section scripts{
+    <div class="load" style="text-align:center">
+        <img src="~/Content/Images/dayloading.gif" style="margin:0 auto;height:auto;width:300px;" />
+        <h5 style="color:#000000;line-height:30px">با تشکر از صبر و شکیبایی شما، درخواست شما در حال پیگیری است</h5>
+    </div>
+
+    <div class="mask"></div>
+    <script>
+        var btn;
+        var dialog = document.querySelector('dialog');
+        var fileUploader = $('#fileUploader').html();
+        if (!dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+        }
+
+
+        function formSubmit() {
+            if ($("#file").val() === "") {
+                $('.message').html('<p style="color:red">انتخاب تصویر الزامیست.</p>').fadeIn().delay(5000).fadeOut();
+            }
+            else {
+                var formdata = new FormData(document.getElementById("formFile"));
+                $.ajax({
+                    url: '@Url.Action(actionName:"IconUpload", controllerName: "Images")',
+                    type: "post",
+                    data: formdata,
+                    mimeTypes: "multipart/form-data",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (result) {
+                        switch (result) {
+                            case "Error":
+                                $('.message').html('<p style="color:red">خطایی رخ داده است! با پشتیبانی درمیان بگذارید.</p>').fadeIn().delay(5000).fadeOut();
+                                break;
+                            case "Exists":
+                                $('.message').html('<p style="color:red">قبلا تصویر برای این محصول تعیین شده است. به کارشناس پشتیبانی اطلاع دهید.</p>').fadeIn().delay(5000).fadeOut();
+
+                                break;
+                            default:
+                                document.getElementById("formFile").reset();
+                                btn = document.getElementById("btn" + $("#valId").val());
+                                btn.parentElement.innerHTML = result;
+                                dialog.close();
+                                break;
+                        }
+                        if (result != '1') {
+
+                        } else {
+                            $('.message').html('<p style="color:red">خطایی رخ داده است! با پشتیبانی درمیان بگذارید.</p><p style="color:blue">با تشکر</p>').delay(3000).html("");
+                        }
+
+
+                    },
+                    erorr: function () {
+                        $('.message').html('<p style="color:red">خطایی رخ داده است! با پشتیبانی درمیان بگذارید.</p><p style="color:blue">با تشکر</p>').delay(3000).html("");
+                    },
+                    complete: function () {
+
+                    }
+
+                });
+            }
+        }
+        function SubmitAddPrice() {
+            dialog.close();
+            $('.mask').fadeIn();
+            $('.load').fadeIn();
+            var formdata = new FormData(document.getElementById('FormAddPrice'));
+            $.ajax({
+                url: '@Url.Action(actionName:"_SubmitAddPrice",controllerName: "Products")',
+                type: "post",
+                data: formdata,
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.showModal();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+                        dialog.close();
+
+                    });
+                },
+                complete: function () {
+                    $('.mask').hide();
+                    $('.load').hide();
+                }
+            });
+        }
+        function showDialog(id) {
+            this.event.preventDefault();
+            $('.mdl-dialog').html(fileUploader);
+            dialog.showModal();
+            document.getElementById("TEntity").value = "Product";
+            document.getElementById("valId").value = id;
+            document.getElementById("formFile").reset();
+            dialog.querySelector('.close').addEventListener('click', function () {
+                dialog.close();
+
+            });
+        }
+
+        function colorList(id) {
+
+            $('.mask').fadeIn();
+            $('.load').fadeIn();
+            $.ajax({
+                url: '@Url.Action(actionName:"List",controllerName: "Colors")',
+                type: "post",
+                data: { id: id },
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.showModal();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+                        dialog.close();
+
+                    });
+                },
+                complete: function () {
+                    $('.mask').hide();
+                    $('.load').hide();
+                }
+            });
+        }
+        function AddPrice(Id) {
+
+            $('.mask').fadeIn();
+            $('.load').fadeIn();
+            $.ajax({
+                url: '@Url.Action(actionName:"_AddPrice",controllerName: "Products")',
+                type: "post",
+                data: { id: Id },
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.showModal();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+                        dialog.close();
+
+                    });
+                },
+                complete: function () {
+                    $('.mask').hide();
+                    $('.load').hide();
+                }
+            });
+        }
+
+        function SetColor(id, ProductId) {
+            $.ajax({
+                url: '@Url.Action(actionName:"SelectColor",controllerName: "Colors")',
+                type: "post",
+                data: { id: id, ProductId: ProductId },
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+                        dialog.close();
+
+                    });
+                },
+                complete: function () {
+
+                }
+            });
+        }
+
+        function NoColor(id, ProductId) {
+            $.ajax({
+                url: '@Url.Action(actionName:"NoColor",controllerName: "Colors")',
+                type: "post",
+                data: { id: id, ProductId: ProductId },
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+                        dialog.close();
+
+                    });
+                },
+                complete: function () {
+
+                }
+            });
+        }
+
+
+    </script>
+
+}

@@ -1,0 +1,107 @@
+﻿@model Businessdevweb.Models.BannerSlider
+@{
+    ViewBag.Title = "افزودن بنر";
+    string returnIdUrl = ViewBag.returnIdUrl;
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+            <div class="mdl-grid mdl-color--grey-50">
+                <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center ">
+                    @Html.ValidationSummary(true, "", new { @class = "mdl-color-text--red" })
+                </div>
+ 
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col ">
+
+                    @Html.LabelFor(model => model.PageId, htmlAttributes: new { @class = "mdl-textfield__label", @for = "PageId" })
+                    <select id="PageId" name="PageId" class="mdl-textfield__input" required>
+                        <option value=""></option>
+                        @foreach (var item in (SelectList)ViewBag.PageId)
+                        {
+                            <option value="@item.Value" @((item.Selected) ? "selected" : "")>@item.Text</option>
+                        }
+
+                    </select>
+                    @Html.ValidationMessageFor(model => model.PageId, "", new { @class = "mdl-textfield__error" })
+
+                </div>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-cell mdl-cell--12-col" for="IsPage">
+                    @Html.CheckBoxFor(model => model.IsPage, new { @class = "mdl-checkbox__input", id = "IsPage" })
+                    <span class="mdl-checkbox__label">
+                        @Html.DisplayNameFor(model => model.IsPage)
+                    </span>
+                </label>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col ">
+                    @Html.LabelFor(model => model.DisplayedPageId, htmlAttributes: new { @class = "mdl-textfield__label", @for = "DisplayedPageId" })
+                    <select id="DisplayedPageId" name="DisplayedPageId" class="mdl-textfield__input" required>
+                        <option value=""></option>
+                        @foreach (var item in (SelectList)ViewBag.DisplayedPageId)
+                        {
+                            <option value="@item.Value" @((item.Selected) ? "selected" : "")>@item.Text</option>
+                        }
+
+                    </select>
+                    @Html.ValidationMessageFor(model => model.DisplayedPageId, "", new { @class = "mdl-textfield__error" })
+
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col ">
+                    @Html.LabelFor(model => model.SettingId, htmlAttributes: new { @class = "mdl-textfield__label", @for = "SettingId" })
+                    <select id="SettingId" name="SettingId" class = "mdl-textfield__input" required>
+                        <option value=""></option>
+                        @foreach (var item in (SelectList)ViewBag.SettingId)
+                        {
+                            <option value="@item.Value" @((item.Selected)?"selected":"")>@item.Text</option>
+                        }
+                        
+                    </select>
+                    @Html.ValidationMessageFor(model => model.SettingId, "", new { @class = "mdl-textfield__error" })
+
+                </div>
+                <div class="mdl-cell mdl-cell--12-col">
+                    <input type="submit" value="ذخیره" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored " />
+                    <a href='@(Url.Action("BannerSliders",new { id= (Model.Setting==null)?Model.DisplayedPageId:Model.SettingId}))' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">بازگشت </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+@{
+    <script>
+        window.addEventListener("pageshow", function () {
+            var ispage = document.querySelector('.mdl-checkbox[for="IsPage"]');
+            if (!ispage.classList.contains("is-checked")) {
+                document.getElementById("SettingId").disabled = false;
+                document.getElementById("SettingId").parentElement.classList.remove("is-disabled");
+                document.getElementById("DisplayedPageId").disabled = true;
+                document.getElementById("DisplayedPageId").parentElement.classList.add("is-disabled")
+
+            } else {
+                document.getElementById("SettingId").disabled = true;
+                document.getElementById("SettingId").parentElement.classList.add("is-disabled")
+                document.getElementById("DisplayedPageId").disabled = false;
+                document.getElementById("DisplayedPageId").parentElement.classList.remove("is-disabled")
+
+            }
+            ispage.addEventListener('click', function () {
+                if (document.querySelector('.mdl-checkbox[for="IsPage"]').classList.contains("is-checked")) {
+                    document.getElementById("SettingId").disabled = false;
+                    document.getElementById("SettingId").parentElement.classList.remove("is-disabled");
+                    document.getElementById("DisplayedPageId").disabled = true;
+                    document.getElementById("DisplayedPageId").parentElement.classList.add("is-disabled")
+
+                } else {
+                    document.getElementById("SettingId").disabled = true;
+                    document.getElementById("SettingId").parentElement.classList.add("is-disabled")
+                    document.getElementById("DisplayedPageId").disabled = false;
+                    document.getElementById("DisplayedPageId").parentElement.classList.remove("is-disabled")
+
+                }
+            });
+        });
+
+    </script>
+}

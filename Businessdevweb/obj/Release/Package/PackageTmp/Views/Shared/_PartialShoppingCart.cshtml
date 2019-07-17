@@ -1,0 +1,27 @@
+﻿@{
+
+
+    <input type="hidden" id="getCount" value="art.GetCount()" />
+
+        <div class="mdl-color-text--black " style="width:280px">
+            <div class=" mdl-shadow--2dp mdl-color--white" style="position:relative;display:block; margin:10px;height:70px;width:260px">
+                <div class="mdl-color--green" style="position:relative;display:inline-block; height:70px;right:0;bottom:0;top:0;width:10px "></div>
+                <div style="position:relative;display:inline-block;right:10px;bottom:0;top:0;height:70px;width:210px">
+                    <p class="link-best-news">تعداد </p>
+                    <p class="link-best-news">با سایز  و ضخامت </p>
+                    <p class="link-best-news"></p>
+                </div>
+                <div style="position:absolute;display:inline-block;left:10px; height:70px;bottom:0;top:0;width:30px ">
+                    <button type="button" class=" mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" style="padding:0;margin:0;min-width:0; text-align:center;width:30px;max-width:30px;height:30px ;margin-bottom:3px" onclick="addToCart('item.ProductId');">
+                        <i class="material-icons" style="font-size:20px;">add_shopping_cart</i>
+                    </button>
+                    <div class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color-text--red" style="padding:0;margin:0;min-width:0; text-align:center;width:30px;max-width:30px;height:30px;margin-bottom:3px" onclick="removeCart('item.Id','item.Qty');">
+                        <i class="material-icons" style="font-size:20px;">remove_circle_outline</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+}

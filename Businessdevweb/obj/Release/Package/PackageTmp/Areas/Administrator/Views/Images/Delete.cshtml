@@ -1,0 +1,61 @@
+﻿@model Businessdevweb.Models.SelectedImages
+
+@{
+    ViewBag.Title = "حذف تصویر";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+    var Id = "";
+    string TEntity = ViewData["TEntity"].ToString();
+    switch (TEntity)
+    {
+        case "Product":
+            {
+                Id = Model.ProductId;
+            }
+            break;
+        case "ProductCategory":
+            {
+                Id = Model.CategoryId;
+            }
+            break;
+        case "Setting":
+            {
+                Id = Model.SettingId;
+            }
+            break;
+        default:
+            break;
+    }
+}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <div class="mdl-cell mdl-cell--12-col">
+                <h1 class="mdl-typography--title">@Html.DisplayNameFor(m => m.Image.Title): @Model.Image.Title</h1>
+            </div>
+            <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone">
+                        <img src="@(Model.Image.Path+Model.Image.Name+Model.Image.Ext)" alt="@Model.Image.Alt" style="height:auto;width:100%" />
+                    </div>
+
+                    <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone">
+                        <p>@Html.DisplayNameFor(m => m.Image.Alt): @Model.Image.Alt</p>
+                        <p>@Html.DisplayNameFor(m => m.Image.Size): @Model.Image.Size</p>
+                        <p>@Html.DisplayNameFor(m => m.Image.InsertTime): @Model.Image.InsertTime</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="TEntity" value="@TEntity" />
+        <div class="mdl-cell mdl-cell--12-col" >
+            <input type="submit" value="حذف" class="mdl-button mdl-js-button mdl-button--colored" /> |
+            @Html.ActionLink("بازگشت", "ImageUpload","Images",new {id=Id,TEntity= TEntity },new { })
+        </div>
+    }
+</div>
+
+

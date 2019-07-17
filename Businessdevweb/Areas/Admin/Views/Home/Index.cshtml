@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "خوش آمدید!";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var Contact = (List<Businessdevweb.Models.ContactUs>)ViewBag.ContactUs;
+}
+
+<div class="row">
+    <div class="col-12">
+    
+    </div>
+</div>
+@if (Contact.Count() > 0)
+{
+    <div class="mdl-grid">
+        <style>
+            p {
+                padding: 5px;
+                font-size: medium;
+            }
+
+                p span {
+                    padding-right: 5px;
+                    padding-left: 5px;
+                }
+        </style>
+        @foreach (var item in Contact)
+        {
+            <div class="mdl-cell mdl-cell--12-col mdl-shadow--4dp mdl-color--white">
+                <p>
+                    <span>@item.FullName</span>
+                    <span>@item.Phone</span>
+                    <span>@item.Email</span>
+                </p>
+
+                <p>@item.Message</p>
+                <div>
+                    <a href='@Url.Action("DeleteMessage","Home",new { Id=item.Id})' class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised mdl-js-ripple-effect">حذف پیام</a>
+                </div>
+            </div>
+        }
+    </div>
+}

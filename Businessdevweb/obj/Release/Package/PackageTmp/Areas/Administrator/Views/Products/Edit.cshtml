@@ -1,0 +1,85 @@
+﻿@model Businessdevweb.Areas.Administrator.Models.EditProductViewModel
+
+
+@{
+    ViewBag.Title = "ویرایش محصول";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50 mdl-shadow--2dp">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                @Html.ValidationSummary(true, "", new { @class = "mdl-color-text--red" })
+                <div class="mdl-cell mdl-cell--12-col" style="border-bottom:1px solid rgba(0, 0, 0, 0.20)">
+
+
+                    <div class="mdl-grid">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                            @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+                            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "Code" })
+                            @Html.ValidationMessageFor(model => model.Code, "", new { @class = "mdl-textfield__error" })
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col ">
+                            @Html.LabelFor(model => model.FirstTitle, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "FirstTitle" })
+                            <div class="mdl-badge mdl-badge-counter" for="FirstTitle">
+                                @Html.EditorFor(model => model.FirstTitle, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.FirstTitle, "", new { @class = "mdl-textfield__error" })
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col ">
+                            @Html.LabelFor(model => model.SecondTitle, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "SecondTitle" })
+                            <div class="mdl-badge mdl-badge-counter" for="SecondTitle">
+                                @Html.EditorFor(model => model.SecondTitle, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.SecondTitle, "", new { @class = "mdl-textfield__error" })
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col ">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "Description" })
+                            @Html.TextAreaFor(model => model.Description, new { @class = "ckeditor" })
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col ">
+                            @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "Brand" })
+                            @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+                            @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "mdl-textfield__error" })
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col ">
+                            @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "SecondTitle" })
+                            @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+                            @Html.ValidationMessageFor(model => model.Model, "", new { @class = "mdl-textfield__error" })
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col">
+                            @Html.DropDownList("CategoryId", null, "انتخاب گزینه مورد نظر", htmlAttributes: new { @class = "mdl-textfield__input" })
+                            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "mdl-textfield__error" })
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col ">
+                            @Html.LabelFor(model => model.MetaDescription, htmlAttributes: new { @class = "mdl-textfield__label", @for = "MetaDescription" })
+                            <div class="mdl-badge mdl-badge-counter" for="MetaDescription">
+                                @Html.TextAreaFor(model => model.MetaDescription, new { @class = "mdl-textfield__input" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.MetaDescription, "", new { @class = "mdl-textfield__error" })
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col">
+                            @Html.LabelFor(model => model.MetaKeyWord, htmlAttributes: new { @class = "mdl-textfield__label", @for = "MetaKeyWord" })
+                            <div class="mdl-badge mdl-badge-counter" for="MetaKeyWord">
+                                @Html.TextAreaFor(model => model.MetaKeyWord, 4, 5, htmlAttributes: new { @class = "mdl-textfield__input" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.MetaKeyWord, "", new { @class = "mdl-textfield__error" })
+                        </div>
+                    </div>
+                </div>
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <input type="submit" value="ذخیره تغییرات" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored " />
+                            <a href='@((ViewBag.Id ==null)?Url.Action("Index"):Url.Action("Details","Products",new { Id=ViewBag.Id}))' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">بازگشت </a>
+                        </div>
+            }
+        </div>
+    </div>
+</div>
+@section scripts{
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+}

@@ -1,0 +1,218 @@
+﻿@model Businessdevweb.Models.Product
+@{
+
+    ViewBag.Title = Model.FirstTitle;
+
+    var ProductFeatures = from f in Model.ProductFeatures
+                          group f by f.Group into g
+                          select g;
+
+    Layout = "~/Views/Shared/_LayoutProduct.cshtml";
+}
+
+
+
+                    <div class="mdl-grid mdl-color--grey-100 gallery-box" >
+                        <div class="mdl-cell mdl-cell--8-col">
+                            <div class="mdl-grid mdl-grid--no-spacing mdl-card mdl-shadow--2dp" style="width:100%">
+                                <div class="mdl-cell mdl-cell--12-col mdl-color--blue-grey-50 mdl-card__title" style="line-height:20px">
+                                    <hgroup>
+                                        <h1 class="mdl-card__title-text">@Model.FirstTitle</h1>
+
+                                        <h2 class="mdl-card__subtitle-text">@(Model.SecondTitle)</h2>
+                                    </hgroup>
+
+                                </div>
+                                 <div class="mdl-cell mdl-cell--12-col">
+                                    <div class="mdl-grid mdl-grid--no-spacing">
+                                        <div class="mdl-cell mdl-cell--12-col">
+                                            <div class="mdl-grid">
+                                                <div class="mdl-cell mdl-cell--12-col " >
+                                                    @{
+                                                        if (Model.SelectedImages.Count()>0) {
+                                                            var pics = Model.SelectedImages.Where(m => m.Position == "Main").Select(m => m.Image).OrderBy(m => m.InsertTime).ToList();
+
+                                                            var pic = pics.FirstOrDefault();
+                                                            ViewBag.Image = pic.Path + pic.Name + pic.Ext;
+                                                    <div class="targetarea" style="border:1px solid #eee;display:block;position:relative"id="mzoom">
+                                                        <img id="multizoom" src="@(pic.Path + pic.Name + pic.Ext)" alt="@pic.Alt" />
+                                                    </div>
+                                                    <div id="description">@pic.Alt</div>
+                                                    <div class="multizoom thumbs">
+                                                        @foreach (var item in pics)
+    {
+                                                            <a href="@(item.Path + item.Name + item.Ext)" data-large="@(item.Path + "BigImages/" + item.Name + item.Ext)" data-title="@item.Title"><img src="@(item.Path + "thumbnails/" + item.Name + item.Ext)" alt="@item.Alt" title="@item.Title" /></a>
+                                                        }
+                                                        @*<img src="@(item.Path+ "thumbnails/"+item.Name+item.Ext)" alt="@item.Alt" title="@item.Title" style="margin:0 1px" />*@
+
+                                                    </div>
+                                                        } }
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--7-col-desktop">
+                                    <div class="mdl-grid">
+
+                                        <div class="mdl-cell mdl-cell--12-col">
+                                            <p>
+                                                انتخاب رنگ
+                                            </p>
+                                            @{
+                                                foreach (var item in Model.SelectedColors.Select(m => m.Color).ToList())
+                                                {
+                                                    <style>
+
+           @Html.Raw("."+item.Name.Replace(" ", "")+ " .mdl-radio__outer-circle{border-color:" + item.Value +";}")
+                                          @Html.Raw("."+item.Name.Replace(" ", "")+ " .mdl -radio__inner-circle{border-color:" + item.Value + ";" +
+
+                                "background-color:" + item.Value+ ";}")
+
+                                                    </style>
+                                                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect @(item.Name.Replace(" ",""))" for='r@(item.Id)'>
+
+                                                        @Html.RadioButton("ColorId", item.Id, true, new { @class = "mdl-radio__button", id = "r" + item.Id })
+                                                        <span class="mdl-radio__label">@item.Name</span>
+                                                    </label>
+
+                                                } }
+
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--12-col">
+                                    <div class="mdl-grid">
+                                        <div class="mdl-cell mdl-cell--12-col">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--4-col mdl-color--white  mdl-shadow--4dp">
+                            <div class="mdl-grid">
+
+                 
+                                <div class="mdl-cell mdl-cell--12-col">
+                                    <h4>
+                                        <span>قیمت  برای شما: </span><span> @((Model.Prices.Count > 0) ? Model.Prices.OrderBy(m => m.InsertTime).LastOrDefault().Price.ToString() + " ريال" : "بزودی")</span>
+                                    </h4>
+                                </div>
+                                <div class="mdl-cell mdl-cell--12-col">
+                                    @if (ProductFeatures.Count() > 0)
+                                    {
+                                        <table class="mdl-data-table mdl-js-data-table mdl-cell--12-col" style="text-align:right">
+
+
+                                            @foreach (var item in ProductFeatures)
+                                            {
+
+                                                if (item.Count() > 0)
+                                                {
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="mdl-typography--text-right">@item.Key</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        @foreach (var groupItem in item)
+                                                        {
+                                                            <tr>
+                                                                <td class="mdl-typography--text-right">@groupItem.Name</td>
+                                                                <td class="mdl-typography--text-right">@groupItem.Value</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                }
+
+                                            }
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <div class="mdl-grid mdl-grid--no-spacing mdl-card mdl-shadow--2dp" style="width:100%">
+                                <div class="mdl-cell mdl-cell--12-col mdl-card__title">
+                                    <h3 class="mdl-card__title-text">
+                                        معرفی محصول:
+                                    </h3>
+                                </div>
+                                <div class="mdl-card__supporting-text">
+                                    <p>@Html.Raw(Model.Description)</p>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+@section Banners{
+
+
+    @{
+        if (ViewBag.Banners != null)
+        {
+            Html.RenderPartial("~/Views/Shared/_PartialBanners.cshtml", (List<Businessdevweb.Models.BannerSlider>)ViewBag.Banners);
+        }
+    }
+
+}
+@section Footer{
+    @{Html.RenderPartial("~/Views/Shared/_PartialFooter.cshtml");}
+
+}
+
+@section styles{
+    @if (ViewBag.Banners != null)
+    {
+        @Styles.Render("~/Content/Slider")
+    }
+}
+@section scripts{
+
+    <script src="~/Scripts/jquery-v1.8.3.min.js"></script>
+    <script src="~/Scripts/multizoom.js"></script>
+
+    <script>
+
+        jQuery(document).ready(function ($) {
+            $('#multizoom').addimagezoom({  // multi-zoom: options same as for previous Featured Image Zoomer's addimagezoom unless noted as '- new'
+                descArea: '#description', // description selector (optional - but required if descriptions are used) - new
+                speed: 1500, // duration of fade in for new zoomable images (in milliseconds, optional) - new
+                descpos: false, // if set to true - description position follows image position at a set distance, defaults to false (optional) - new
+                imagevertcenter: true, // zoomable image centers vertically in its container (optional) - new
+                magvertcenter: true, // magnified area centers vertically in relation to the zoomable image (optional) - new
+                zoomrange: [2, 4],
+                magnifiersize: [250, 250],
+                magnifierpos: 'left',
+                cursorshadecolor: '#fdffd5',
+                cursorshade: true //<-- No comma after last option!
+            });
+
+        })
+
+    </script>
+@if (ViewBag.Banners != null)
+    {
+    @Scripts.Render("~/bundles/Slider")
+    <script>
+
+            $('.autoplay').slick({
+                dots: true,
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                rtl: true,
+
+            });
+    </script>
+}
+
+
+    }

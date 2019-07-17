@@ -1,0 +1,24 @@
+﻿@model Businessdevweb.Models.ContactUsPage
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var setting = (Businessdevweb.Models.Setting)ViewData["Setting"];
+    ViewBag.Title = Model.Title;
+
+}
+
+<div id="content">
+    <div class="container">
+        <section class="c-info-page c-about-us">
+            <div class="c-about-us__head">
+                <div class="c-about-us__head-inner">
+                    <div class="c-about-us__head-title">
+                        <h1>@Model.Title</h1>
+                    </div>
+                    <div class="c-about-us__head-content">
+                        @Html.Raw(Model.Content)
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

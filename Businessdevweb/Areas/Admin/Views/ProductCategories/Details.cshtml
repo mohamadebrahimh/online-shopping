@@ -1,0 +1,88 @@
+﻿@model Businessdevweb.Models.ProductCategory
+
+@{
+    ViewBag.Title = "جزئیات دسته " + Html.DisplayFor(model => model.Title);
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <div class="mdl-cell mdl-cell--12-col">
+                <h4> می توانید از طریق دکمه ویرایش اطلاعات دسته (<span class="mdl-color-text--red"> @Html.DisplayFor(model => model.Title)</span> ) را تغییر دهید!</h4>
+                <h6><span class="mdl-color-text--red"> بدانید که با تغییر اطلاعات، اطلاعات جدید جایگزین اطلاعات قبل می شود.</span></h6>
+                <hr />
+            </div>
+            <div class="mdl-cell mdl-cell--12-col">
+                <h4 class="mdl-typography--title">
+                    تعداد زیر دسته های @Html.DisplayFor(model => model.Title): <span class="mdl-color-text--red">@Html.DisplayFor(model => model.Categories.Count)</span> دسته
+
+                    و @if (Model.ParentId == null)
+                    {
+                        <span>زیر دسته نمی باشد.</span>
+                    }
+                    else
+                    {
+                        <span>در دسته ای با نام <span class="mdl-color-text--red">@Html.DisplayFor(model => model.Parent.Title)</span> قرار دارد.</span>
+                    }
+                    <span> تعداد محصولاتی که در این دسته قرار گرفته است <span class="mdl-color-text--red">@Html.DisplayFor(model => model.Products.Count)</span> محصول می باشد.</span>
+                </h4>
+            </div>
+            <dl class="mdl-cell mdl-cell--12-col">
+                <dt class="mdl-typography--title">
+                    تعداد تصویر آپلود شده برای این دسته
+                </dt>
+
+                <dd class="mdl-typography--title mdl-color-text--red">
+                    @Html.DisplayFor(model => model.SelectedImages.Count)
+                </dd>
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.Visit)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.Visit)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.MetaDescription)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.MetaDescription)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.MetaKeyWord)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.MetaKeyWord)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.Index)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.Index)
+                </dd>
+
+
+            </dl>
+                <div class="mdl-cell mdl-cell--12-col">
+                    @Html.ActionLink("ویرایش", "Edit", new { id = Model.Id }, new { @class = "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored " })
+                    <a href='@(Url.Action("Index"))' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">بازگشت </a>
+                </div>
+        </div>
+    </div>
+</div>
+

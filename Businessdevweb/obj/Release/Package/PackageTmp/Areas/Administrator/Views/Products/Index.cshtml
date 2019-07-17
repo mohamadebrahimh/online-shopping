@@ -1,0 +1,166 @@
+﻿@model IEnumerable<Businessdevweb.Models.ProductCategory>
+
+@{
+    ViewBag.Title = "دسته های محصول";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <div class="mdl-cell mdl-cell--12-col">
+                <a href='@Url.Action("Create","ProductCategories")' class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect"><i class="material-icons">add</i> افزودن دسته</a>
+                <a href='@Url.Action("Create","Products")' class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect"><i class="material-icons">add_shopping_cart</i> افزودن محصول</a>
+            </div>
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <ul class="mdl-grid " style="list-style:none;list-style-type:none">
+                    @foreach (var item in Model)
+                    {
+                        var pic = "";
+                        if (item.SelectedImages != null)
+                        {
+                            var img = item.SelectedImages.FirstOrDefault(m => m.Position == "Icon");
+                            if (img != null)
+                            {
+                                pic = img.Image.Path + img.Image.Name + img.Image.Ext;
+                            }
+                        }
+                        <li class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone mdl-color--white mdl-shadow--2dp" style="height:50px!important;display:block;position:relative">
+                            <div style="height:50px;display:inline-block;">
+                                @if (pic == "")
+                                {
+                                    <button id="show-dialog" type="button" valueId="@item.Id" class="mdl-color--grey-100 mdl-button" style="height:50px;width:50px;min-height:50px;min-width:50px;padding:0;margin:unset ">
+                                        <i class="material-icons mdl-color-text--blue-grey-300" style="font-size:30px;vertical-align:middle">photo</i>
+                                    </button>
+
+                                }
+                                else
+                                {
+
+                                    <img src="@(pic)" height="50" width="50" />
+                                }
+
+
+                            </div>
+                            <div style="position:absolute;height:50px;padding-right:3px;right:50px;left:20px;display:inline-block">
+
+                                <div style="position:absolute;display:block; top:0;height:25px;line-height:25px;font-size:small">
+                                    <span>@Html.DisplayNameFor(m => m.Title): @item.Title</span>
+                                    <span class="mdl-color-text--grey-500" style="padding-right:5px"></span>
+                                </div>
+                                <div class="mdl-color-text--grey-500" style="position:absolute;display:block; top:25px;height:25px;line-height:25px;font-size:small ">
+                                    <span>تعداد محصول: @item.Products.Count</span>
+                                </div>
+                            </div>
+
+                            <div id="@item.Id" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="padding:0 0 0 10px    ;position:absolute; height :50px;min-width:unset;width:20px!important;left:0px;display:inline-block;">
+                                <i class="material-icons" style="line-height:50px;font-size:30px;display:block">more_vert</i>
+                            </div>
+                            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+                                for="@item.Id">
+                                <li>@Html.ActionLink("افزودن محصول", "Create", "Products", new { id = item.Id }, new { @class = "mdl-menu__item" })</li>
+                                <li>@Html.ActionLink("حذف محصولات", "Delete", "Products", new { id = item.Id }, new { @class = "mdl-menu__item" })</li>
+                                <li>@Html.ActionLink("جزئیات", "Details", "Products", new { id = item.Id }, new { @class = "mdl-menu__item" })</li>
+                                <li>@Html.ActionLink("تصویر اصلی", "ImageUpload", "ProductCategories", new { id = item.Id }, new { @class = "mdl-menu__item" })</li>
+
+                            </ul>
+
+                        </li>
+                    }
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<dialog class="mdl-dialog">
+    <h4 class="mdl-dialog__title">بارگذاری تصویر</h4>
+    <form id="formFile">
+        <div class="mdl-dialog__content">
+
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="hidden" name="id" id="valId" value="" />
+                <input type="hidden" name="TEntity" id="TEntity" value="" />
+                <input class="mdl-textfield__input" type="file" id="file" name="file" accept="image/*">
+                <p class="message"></p>
+            </div>
+
+        </div>
+        <div class="mdl-dialog__actions">
+            <button type="submit" class="mdl-button">بارگذاری</button>
+            <button type="button" class="mdl-button close">انصراف</button>
+        </div>
+    </form>
+</dialog>
+@section scripts{
+
+    <script>
+           var dialog = document.querySelector('dialog');
+           var ValueId;
+           var btn;
+    var showDialogButton = document.querySelectorAll('#show-dialog');
+    if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    for (var i = 0; i < showDialogButton.length; i++) {
+
+        showDialogButton.item(i).addEventListener('click', function() {
+            dialog.showModal();
+            document.getElementById("TEntity").value = "ProductCategory";
+            document.getElementById("valId").value = this.getAttribute("valueId");
+            btn = this;
+        });
+    }
+
+
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+
+    $("#formFile").submit(function(e){
+        e.preventDefault();
+        if ($("#formFile input:file").val()!="") {
+
+
+        var formdata = new FormData(this);
+        $.ajax({
+            url: '@Url.Action(actionName:"IconUpload",controllerName: "Images")',
+            type: "post",
+            data: formdata,
+            mimeTypes:"multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (result) {
+                if (result !='1') {
+                    $("#formFile input").val("");
+                    btn.parentElement.innerHTML = result;
+                    dialog.close();
+                } else {
+                    $('.message').html('<p style="color:red">خطایی رخ داده است! با پشتیبانی درمیان بگذارید.</p><p style="color:blue">با تشکر</p>').delay(3000).html("");
+                }
+
+
+            },
+            erorr: function () {
+                $('.message').html('<p style="color:red">خطایی رخ داده است! با پشتیبانی درمیان بگذارید.</p><p style="color:blue">با تشکر</p>').delay(3000).html("");
+            },
+            complete: function () {
+                $('.mask').delay(2000).fadeOut();
+                $('.load').delay(2000).fadeOut();
+
+            }
+
+        });
+        } else {
+            $('.message').html('<p style="color:red">ابتدا تصویر را انتخاب نمایید.</p><p style="color:blue">با تشکر</p>').delay(3000).html("");
+        }
+
+
+    })
+    </script>
+
+}
+

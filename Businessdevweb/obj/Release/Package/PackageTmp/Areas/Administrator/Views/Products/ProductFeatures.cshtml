@@ -1,0 +1,71 @@
+﻿@model List<Businessdevweb.Models.ProductFeatures>
+@{
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <a href='@(Url.Action("AddFeatures", new { id = ViewBag.ProductId }))' title="افزودن"
+               class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">
+                <i class="material-icons">add</i><span> افزودن خصوصیت</span>
+            </a>
+            @if (Model.Count > 0)
+            {
+
+                var ProductFeatures = (from f in Model
+                                       group f by f.Group into g
+                                       select g).ToList();
+                @Html.ValidationSummary(true, "", new { @class = "mdl-color-text--red" })
+                if (ProductFeatures.Count() > 0)
+                {
+                    <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-js-data-table ">
+
+
+                        @foreach (var item in ProductFeatures)
+                        {
+
+                            if (item.Count() > 0)
+                            {
+                        <thead>
+                            <tr>
+                                <th>@item.Key</th>
+                                <th>
+                                    <a href='@(Url.Action("AddFeatures", new { id = Model.FirstOrDefault().ProductId ,Group=item.Key }))' title="افزودن خصوصیت به این گروه"
+                                       class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">
+                                        <i class="material-icons">add</i><span> افزودن خصوصیت به این گروه</span>
+                                    </a>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var groupItem in item)
+                                    {
+                                    <tr>
+                                        <td>@groupItem.Name</td>
+                                        <td>@groupItem.Value</td>
+                                        <td>
+                                            <a href='@(Url.Action("EditFeatures", new { id = groupItem.Id }))' title="ویرایش"
+                                               class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                <i class="material-icons">edit</i><span></span>
+                                            </a>
+
+                                            <a href='@(Url.Action("DeleteFeatures", new { id = groupItem.Id }))' title="حذف شود؟"
+                                               class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                <i class="material-icons">delete</i><span></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    }
+                        </tbody>
+                            }
+
+                        }
+                    </table>
+                }
+
+            }
+        </div>
+
+    </div>
+</div>

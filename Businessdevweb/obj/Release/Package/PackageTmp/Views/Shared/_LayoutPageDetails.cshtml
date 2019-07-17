@@ -1,0 +1,455 @@
+﻿<!doctype html>
+<html lang="fa">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="@ViewBag.MetaDescription">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="@ViewBag.Title">
+    <link rel="apple-touch-icon-precomposed" href="~/favicon.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="shortcut icon" href="~/favicon.png">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+    <link rel="canonical" href="http://www.example.com/">
+    -->
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="@ViewBag.Title" />
+    <meta property="og:description" content="@ViewBag.MetaDescription" />
+    <meta property="og:url" content="@ViewBag.Url" />
+    <meta property="og:site_name" content="@ViewBag.SiteName" />
+    <meta property="og:image"  content='@("http://dayTahrir.com" + ViewBag.Image)'/>
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="266" />
+    <meta property="og:image:type" content="image/jpeg" />
+    @Html.Raw(ViewBag.Metatag)
+    @Styles.Render("~/Content/css")
+    @RenderSection("styles", required: false)
+
+    @*<link href="~/Content/CustomizeStyle.css" rel="stylesheet" />*@
+    <style> 
+    
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  background-color: rgb(186, 47, 47);
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+.demo-box-left {
+  border-radius: 2px;
+  margin-bottom: 80px;
+}
+.mdl-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+    </style>
+    
+</head>
+<body>
+    <div class="mdl-layout mdl-js-layout md-light">
+        <header class="mdl-layout__header mdl-color--grey-100 mdl-color-text--black direction-rtl ">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title mdl-logo">
+                    <img src="~/Content/daylogo1.png" height="40" />
+                </span>
+                <style>
+                    button.mdl-navigation__link {
+                        font-family: 'Yekan';
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                        text-align: center;
+                        vertical-align: middle;
+                        display: inline-block;
+                        z-index: 1000;
+                    }
+
+                        button.mdl-navigation__link.is-active {
+                            background-color: rgba(0, 0, 0, 0.20);
+                        }
+
+                    .menu-cat {
+                        position: absolute;
+                        display: block;
+                        left: 0;
+                        top: 65px;
+                        right: 0;
+                        bottom: 0;
+                        opacity: 0;
+                        display: none;
+                        z-index: 999;
+                    }
+
+                    .menu-cat-item {
+                        position: relative;
+                        display: block;
+                        top: 0;
+                        z-index: 1000;
+                        height: 50px;
+                        min-height: 50px !important;
+                    }
+
+                        .menu-cat-item button.mdl-navigation__link {
+                            position: relative;
+                            line-height: unset;
+                            height: 100%;
+                            min-height: 100%;
+                            margin: 0;
+                            padding-top: 0;
+                            vertical-align: middle;
+                            display: inline-block;
+                        }
+
+                            .menu-cat-item button.mdl-navigation__link.is-active {
+                                background-color: rgba(0, 0, 0, 0.20);
+                            }
+
+                    .menu-cat-item-childs {
+                        position: relative;
+                        border-top: 1px solid rgba(128, 128, 128, 0.90);
+                        z-index: 1000;
+                        height: 300px;
+                        max-height: 300px;
+                        overflow: hidden;
+                        opacity: 0;
+                        display: none;
+                        overflow-y: auto;
+                    }
+
+                        .menu-cat-item-childs.is-visible {
+                            opacity: 1;
+                            cursor: auto;
+                            display: block;
+                        }
+
+                    .menu-cat.childs > .divAfter {
+                        position: absolute;
+                        display: block;
+                        top: 265px;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                    }
+
+                    .menu-cat > .divAfter {
+                        position: absolute;
+                        display: block;
+                        top: 65px;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                    }
+
+                    .menu-cat.is-visible {
+                        display: block;
+                        opacity: 1;
+                        cursor: auto;
+                    }
+                </style>
+                @{Html.RenderPartial("~/Views/Shared/_PartialHeaderMenu.cshtml", ViewData["Categories"]);}
+                <nav class="mdl-navigation mdl-color-text--black">
+                    <a class="mdl-navigation__link mdl-color-text--black" href="~/ارتباط-باما">ارتباط با ما</a>
+                    <a class="mdl-navigation__link mdl-color-text--black" href="~/درباره-ما">درباره ما</a>
+                </nav>
+                <!-- Add spacer, to align navigation to the left -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <!-- Navigation -->
+            
+            </div>
+        </header>
+        <div class="mdl-layout__drawer direction-rtl">
+            <span class="mdl-layout-title">دی تحریر</span>
+            @{Html.RenderPartial("~/Views/Shared/_PartialDrawerMenu.cshtml");}
+        </div>
+        <main class="mdl-layout__content">
+            <div class="mdl-grid direction-rtl">
+                <div class="mdl-cell mdl-cell--12-col">
+                    @RenderSection("Banners", required: false)
+                </div>
+                <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+                    @RenderBody()
+                </div>
+                <div class="demo-box-left mdl-color--white mdl-shadow--4dp mdl-cell mdl-cell--12-col mdl-cell--4-col-desktop ">
+                    @RenderSection("LeftBox", required: false)
+                </div>
+            </div>
+            @RenderSection("AboutMe", required: false)
+            @RenderSection("Footer", required: false)
+        </main>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/Material")
+    <script>
+
+        var menuCats = document.querySelectorAll('.menu-cat');
+        for (var i = 0; i < menuCats.length; i++) {
+
+            var elem = menuCats.item(i);
+
+            document.getElementById(elem.getAttribute('for')).addEventListener("click", function () {
+                elem = document.querySelector('.menu-cat[for="' + this.id + '"]');
+                if (elem.classList.contains("is-visible")) {
+                    var childs = elem.querySelectorAll(".menu-cat-item-childs.is-visible")
+                    for (var i = 0; i < childs.length; i++) {
+                        var btn = childs.item(i);
+                        childs.item(i).classList.remove("is-visible");
+
+                        document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+                    }
+                    this.classList.remove('is-active');
+                    elem.classList.remove('is-visible');
+                    elem.classList.remove('childs');
+                } else {
+                    var isVisible = document.querySelectorAll('.menu-cat.is-visible');
+                    for (var j = 0; j < isVisible.length; j++) {
+                        var childs = isVisible.item(j).querySelectorAll(".menu-cat-item-childs.is-visible")
+                        for (var i = 0; i < childs.length; i++) {
+                            var btn = childs.item(i);
+                            childs.item(i).classList.remove("is-visible");
+                            document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+                        }
+
+                        document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+                        isVisible.item(j).classList.remove("is-visible");
+                        isVisible.item(j).classList.remove("childs");
+                    }
+                    this.classList.add("is-active");
+                    elem.classList.add('is-visible');
+                }
+            }
+            , true);
+//            document.getElementById(elem.getAttribute('for')).addEventListener("mouseover", function () {
+//                elem = document.querySelector('.menu-cat[for="' + this.id + '"]');
+//                if (elem.classList.contains("is-visible")) {
+//                    var childs = elem.querySelectorAll(".menu-cat-item-childs.is-visible")
+//                    for (var i = 0; i < childs.length; i++) {
+//                        var btn = childs.item(i);
+//                        childs.item(i).classList.remove("is-visible");
+//                        document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+//                    }
+//                    this.classList.remove('is-active');
+//                    elem.classList.remove('is-visible');
+//                    elem.classList.remove('childs');
+//                } else {
+//                    var isVisible = document.querySelectorAll('.menu-cat.is-visible');
+//                    for (var j = 0; j < isVisible.length; j++) {
+//                        var childs = isVisible.item(j).querySelectorAll(".menu-cat-item-childs.is-visible")
+//                        for (var i = 0; i < childs.length; i++) {
+//                            var btn = childs.item(i);
+//                            childs.item(i).classList.remove("is-visible");
+//                            document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+//                        }
+//                        document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+//                        isVisible.item(j).classList.remove("is-visible");
+//                        isVisible.item(j).classList.remove("childs");
+//                    }
+//                    this.classList.add("is-active");
+//                    elem.classList.add('is-visible');
+//                }
+//            }
+//, true);
+//            document.getElementById(elem.getAttribute('for')).addEventListener("touchstart", function () {
+//                elem = document.querySelector('.menu-cat[for="' + this.id + '"]');
+//                if (elem.classList.contains("is-visible")) {
+//                    var childs = elem.querySelectorAll(".menu-cat-item-childs.is-visible")
+//                    for (var i = 0; i < childs.length; i++) {
+//                        var btn = childs.item(i);
+//                        childs.item(i).classList.remove("is-visible");
+//                        document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+//                    }
+//                    this.classList.remove('is-active');
+//                    elem.classList.remove('is-visible');
+//                    elem.classList.remove('childs');
+//                } else {
+//                    var isVisible = document.querySelectorAll('.menu-cat.is-visible');
+//                    for (var j = 0; j < isVisible.length; j++) {
+//                        var childs = isVisible.item(j).querySelectorAll(".menu-cat-item-childs.is-visible")
+//                        for (var i = 0; i < childs.length; i++) {
+//                            var btn = childs.item(i);
+//                            childs.item(i).classList.remove("is-visible");
+//                            document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+//                        }
+//                        document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+//                        isVisible.item(j).classList.remove("is-visible");
+//                        isVisible.item(j).classList.remove("childs");
+//                    }
+//                    this.classList.add("is-active");
+//                    elem.classList.add('is-visible');
+//                }
+//            }
+//, true);
+            var newElement = document.createElement('div');
+            newElement.classList.add('divAfter');
+            newElement.addEventListener("click", function () {
+                var isVisible = document.querySelectorAll('.menu-cat.is-visible');
+                for (var j = 0; j < isVisible.length; j++) {
+                    var childs = isVisible.item(j).querySelectorAll(".menu-cat-item-childs.is-visible")
+                    for (var i = 0; i < childs.length; i++) {
+                        childs.item(i).classList.remove("is-visible");
+                        var btn = childs.item(i);
+                        document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+                    }
+
+                    document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+                    isVisible.item(j).classList.remove("is-visible");
+                    isVisible.item(j).classList.remove('childs');
+                }
+
+            }, true);
+            //newElement.addEventListener("touchstart", function () {
+            //    var isVisible = document.querySelectorAll('.menu-cat.is-visible');
+            //    for (var j = 0; j < isVisible.length; j++) {
+            //        var childs = isVisible.item(j).querySelectorAll(".menu-cat-item-childs.is-visible")
+            //        for (var i = 0; i < childs.length; i++) {
+            //            childs.item(i).classList.remove("is-visible");
+            //            var btn = childs.item(i);
+            //            document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+            //        }
+            //        document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+            //        isVisible.item(j).classList.remove("is-visible");
+            //        isVisible.item(j).classList.remove('childs');
+            //    }
+            //}, true);
+            //newElement.addEventListener("mouseover", function () {
+            //    var isVisible = document.querySelectorAll('.menu-cat.is-visible');
+            //    for (var j = 0; j < isVisible.length; j++) {
+            //        var childs = isVisible.item(j).querySelectorAll(".menu-cat-item-childs.is-visible")
+            //        for (var i = 0; i < childs.length; i++) {
+            //            childs.item(i).classList.remove("is-visible");
+            //            var btn = childs.item(i);
+            //            document.getElementById(btn.getAttribute('for')).classList.remove("is-active");
+            //        }
+            //        document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+            //        isVisible.item(j).classList.remove("is-visible");
+            //        isVisible.item(j).classList.remove('childs');
+            //    }
+            //}, true);
+            elem.appendChild(newElement);
+        }
+        var childs = document.querySelectorAll('.menu-cat .menu-cat-item-childs');
+        if (childs.length > 0) {
+            ApplyMenuCatItemChilds(childs);
+        }
+        function ApplyMenuCatItemChilds(childs) {
+            for (var i = 0; i < childs.length; i++) {
+                var elem = childs.item(i);
+                if (elem !== null) {
+                    document.getElementById(elem.getAttribute('for')).addEventListener("click",function () {
+                        elem = document.querySelector('.menu-cat-item-childs[for="' + this.id + '"]');
+                        if (elem.classList.contains("is-visible")) {
+                            elem.classList.remove('is-visible');
+                            this.parentElement.parentElement.classList.remove('childs');
+
+                            this.classList.remove("is-active");
+                        } else {
+                            var isVisible = document.querySelectorAll('.menu-cat-item-childs.is-visible');
+                            for (var j = 0; j < isVisible.length; j++) {
+                                document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+                                isVisible.item(j).classList.remove("is-visible");
+                                isVisible.item(j).parentElement.parentElement.classList.remove('childs');
+                            }
+                            elem.classList.add('is-visible');
+
+                            this.classList.add("is-active");
+                            this.parentElement.parentElement.classList.add('childs');
+                        }
+                    }
+                , true);
+               //     document.getElementById(elem.getAttribute('for')).addEventListener("mouseover",function () {
+               //         elem = document.querySelector('.menu-cat-item-childs[for="' + this.id + '"]');
+               //         if (elem.classList.contains("is-visible")) {
+               //             elem.classList.remove('is-visible');
+               //             this.parentElement.parentElement.classList.remove('childs');
+               //             this.classList.remove("is-active");
+               //         } else {
+               //             var isVisible = document.querySelectorAll('.menu-cat-item-childs.is-visible');
+               //             for (var j = 0; j < isVisible.length; j++) {
+               //                 document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+               //                 isVisible.item(j).classList.remove("is-visible");
+               //                 isVisible.item(j).parentElement.parentElement.classList.remove('childs');
+               //             }
+               //             elem.classList.add('is-visible');
+               //             this.classList.add("is-active");
+               //             this.parentElement.parentElement.classList.add('childs');
+               //         }
+               //     }
+               //, true);
+//                    document.getElementById(elem.getAttribute('for')).addEventListener("touchstart", function () {
+//                        elem = document.querySelector('.menu-cat-item-childs[for="' + this.id + '"]');
+//                        if (elem.classList.contains("is-visible")) {
+//                            elem.classList.remove('is-visible');
+//                            this.parentElement.parentElement.classList.remove('childs');
+//                            this.classList.remove("is-active");
+//                        } else {
+//                            var isVisible = document.querySelectorAll('.menu-cat-item-childs.is-visible');
+//                            for (var j = 0; j < isVisible.length; j++) {
+//                                document.getElementById(isVisible.item(j).getAttribute('for')).classList.remove("is-active");
+//                                isVisible.item(j).classList.remove("is-visible");
+//                                isVisible.item(j).parentElement.parentElement.classList.remove('childs');
+//                            }
+//                            elem.classList.add('is-visible');
+//                            this.classList.add("is-active");
+//                            this.parentElement.parentElement.classList.add('childs');
+//                        }
+//                    }
+//, true);
+                }
+            }
+        }
+
+
+
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

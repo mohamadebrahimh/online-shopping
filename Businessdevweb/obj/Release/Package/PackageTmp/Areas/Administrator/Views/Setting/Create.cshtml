@@ -1,0 +1,123 @@
+﻿@model Businessdevweb.Models.Setting
+@{
+    ViewBag.Title = "تنظیمات جدید";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+            <div class="mdl-grid mdl-grid--no-spacing">
+                <div class="mdl-cell mdl-cell--12-col mdl-color-text--black mdl-color--grey-50" style="margin:0 auto">
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center ">
+                            @Html.ValidationSummary(true, "", new { @class = "mdl-color-text--red" })
+                        </div>
+
+                        <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell mdl-cell--12-col-tablet mdl-cell mdl-cell--12-col-phone mdl-shadow--2dp">
+                            <div class="mdl-grid">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col">
+                                    @Html.LabelFor(model => model.PostfixTitle, htmlAttributes: new { @class = "mdl-textfield__label", @for = "PostfixTitle" })
+                                    <div class="mdl-badge mdl-badge-counter" for="PostfixTitle">
+                                        @Html.EditorFor(model => model.PostfixTitle, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.PostfixTitle, "", new { @class = "mdl-textfield__error" })
+
+                                </div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col ">
+                                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "Title" })
+                                    <div class="mdl-badge mdl-badge-counter" for="Title">
+                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "mdl-textfield__error" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdl-cell  mdl-cell--6-col-desktop mdl-cell mdl-cell--12-col-tablet mdl-cell mdl-cell--12-col-phone mdl-shadow--2dp">
+
+                            <div class="mdl-grid">
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-cell mdl-cell--12-col" for="IsActive">
+                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "mdl-checkbox__input", id = "IsActive" })
+                                    <span class="mdl-checkbox__label">
+                                        @Html.DisplayNameFor(model => model.IsActive)
+                                    </span>
+                                </label>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-cell mdl-cell--12-col" for="IsHome">
+                                    @Html.CheckBoxFor(model => model.IsHome, new { @class = "mdl-checkbox__input", id = "IsHome" })
+                                    <span class="mdl-checkbox__label">
+                                        @Html.DisplayNameFor(model => model.IsHome)
+                                    </span>
+                                </label>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-cell mdl-cell--12-col" for="IsProductPage">
+                                    @Html.CheckBoxFor(model => model.IsProductPage, new { @class = "mdl-checkbox__input", id = "IsProductPage" })
+                                    <span class="mdl-checkbox__label">
+                                        @Html.DisplayNameFor(model => model.IsProductPage)
+                                    </span>
+                                </label>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-cell mdl-cell--12-col" for="IsAbout">
+                                    @Html.CheckBoxFor(model => model.IsAbout, new { @class = "mdl-checkbox__input", id = "IsAbout" })
+                                    <span class="mdl-checkbox__label">
+                                        @Html.DisplayNameFor(model => model.IsAbout)
+                                    </span>
+                                </label>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-cell mdl-cell--12-col" for="IsContact">
+                                    @Html.CheckBoxFor(model => model.IsContact, new { @class = "mdl-checkbox__input", id = "IsContact" })
+                                    <span class="mdl-checkbox__label">
+                                        @Html.DisplayNameFor(model => model.IsContact)
+                                    </span>
+                                </label>
+
+                            </div>
+                        </div>
+
+                        <div class="mdl-cell mdl-cell--12-col ">
+                            @Html.LabelFor(model => model.Description)
+                            @Html.TextAreaFor(model => model.Description, new { @class = "ckeditor" })
+                        </div>
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col ">
+                            @Html.LabelFor(model => model.MetaDescription, htmlAttributes: new { @class = "mdl-textfield__label", @for = "MetaDescription" })
+
+                            <div class="mdl-badge mdl-badge-counter" for="MetaDescription">
+                                @Html.TextAreaFor(model => model.MetaDescription, new { @class = "mdl-textfield__input" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.MetaDescription, "", new { @class = "mdl-textfield__error" })
+
+                        </div>
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col">
+                            @Html.LabelFor(model => model.MetaKeyword, htmlAttributes: new { @class = "mdl-textfield__label", @for = "MetaKeyword" })
+
+                            <div class="mdl-badge mdl-badge-counter" for="MetaKeyword">
+                                @Html.TextAreaFor(model => model.MetaKeyword, new { @class = "mdl-textfield__input" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.MetaKeyword, "", new { @class = "mdl-textfield__error" })
+
+                        </div>
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  mdl-cell mdl-cell--12-col">
+                            @Html.LabelFor(model => model.MetaTag, htmlAttributes: new { @class = "mdl-textfield__label", @for = "Index" })
+
+                            @Html.TextAreaFor(model => model.MetaTag, new { @class = "mdl-textfield__input" })
+                            @Html.ValidationMessageFor(model => model.MetaTag, "", new { @class = "mdl-textfield__error" })
+
+                        </div>
+
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <input type="submit" value="ذخیره" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored " />
+                            <a href='@(Url.Action("Index"))' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">بازگشت </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section scripts{
+
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+}

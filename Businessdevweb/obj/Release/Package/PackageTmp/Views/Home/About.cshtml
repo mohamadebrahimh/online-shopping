@@ -1,0 +1,180 @@
+﻿@model Businessdevweb.Models.PageCategory
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid">
+            @foreach (var item in Model.Categories)
+            {
+                <div class="mdl-cell mdl-cell--12-col">
+                    @item.Title
+                </div>
+                <div class="mdl-cell mdl-cell--12-col">
+                    <div class="mdl-grid">
+                        @foreach (var i in item.Pages)
+                        {
+                            if (item.Pages.Count == 1)
+                            {
+                                <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+                                    <div class="mdl-grid">
+                                        <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--3-col-tablet mdl-cell--12-col-phone mdl-card__media ">
+                                            @{
+                                                if (i.SelectedImages.Count > 0)
+                                                {
+                                                    var pic = (from j in i.SelectedImages
+                                                               where j.Position == "Primary"
+                                                               select new
+                                                               {
+                                                                   j.Image.Path,
+                                                                   j.Image.Title,
+                                                                   j.Image.Alt,
+                                                                   j.Image.Ext,
+                                                                   j.Image.Name
+                                                               }).FirstOrDefault();
+                                                    if (pic != null)
+                                                    {
+                                                        <picture>
+                                                            <!--<source srcset="Content/GoldLogo.png" media="(max-width: 1024px) ">-->
+                                                            <source srcset="@(pic.Path + "desktop/" + pic.Name + pic.Ext)" media="(min-width: 760px) ">
+                                                            <source srcset="@(pic.Path + "phone/" + pic.Name + pic.Ext)" media="(min-width: 180px)">
+                                                            <img src="" style="height:auto;width:100%" title="@pic.Title" alt="@pic.Alt" />
+                                                        </picture>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@item.Title" alt="@item.Title">
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@item.Title" alt="@item.Title">
+                                                }
+                                            }
+                                        </div>
+                                        <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--5-col-tablet mdl-cell--12-col-phone">
+                                            <div class="mdl-card__title">
+                                                <a href="~/Pages/@(i.Code.ToString()+"/"+i.Name)" style="text-decoration:none">
+                                                    <h3 class="mdl-card__title-text">
+                                                        @i.Title
+                                                    </h3>
+                                                    <p class="mdl-card__subtitle-text">
+    @i.Brief
+</p>
+                                                    </a>
+                                              
+</div>
+
+                                        </div>
+                                        @if (i.IsContinue)
+                                        {
+                                            <div class="mdl-cell mdl-cell--12-col mdl-card__supporting-text">
+                                                @Html.Raw(i.Content)
+                                            </div>
+                                        }
+                                        
+                                    </div>
+
+                                </div>
+
+                                                }
+                                                else
+                                                {
+                            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--4-col">
+
+                                <div class="mdl-card__media">
+                                    @{
+                                        if (i.SelectedImages.Count > 0)
+                                        {
+                                            var pic = (from j in i.SelectedImages
+                                                       where j.Position == "Primary"
+                                                       select new
+                                                       {
+                                                           j.Image.Path,
+                                                           j.Image.Title,
+                                                           j.Image.Alt,
+                                                           j.Image.Ext,
+                                                           j.Image.Name
+                                                       }).FirstOrDefault();
+                                            if (pic != null)
+                                            {
+                                                <picture>
+                                                    <!--<source srcset="Content/GoldLogo.png" media="(max-width: 1024px) ">-->
+                                                    <source srcset="@(pic.Path + "desktop/" + pic.Name + pic.Ext)" media="(min-width: 760px) ">
+                                                    <source srcset="@(pic.Path + "phone/" + pic.Name + pic.Ext)" media="(min-width: 180px)">
+                                                    <img src="" style="height:auto;width:100%" title="@pic.Title" alt="@pic.Alt" />
+                                                </picture>
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Content/NoPic.jpg" style="height:auto;width:inherit" title="@item.Title" alt="@item.Title">
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Content/NoPic.jpg" style="height:auto;width:inherit" title="@item.Title" alt="@item.Title">
+                                        }
+                                    }
+                                </div>
+                                <div class="mdl-card__title">
+                                    <a href="~/Pages/@(i.Code.ToString()+"/"+i.Name)" style="text-decoration:none">
+                                        <h3 class="mdl-card__title-text">
+                                            @i.Title
+                                        </h3>
+                                    </a>
+                                </div>
+                                <p class="mdl-card__supporting-text">
+                                    @i.Brief
+                                </p>
+                            </div>
+                                            }
+                                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+@section Banners{
+
+
+    @{
+        if (ViewBag.Banners != null)
+        {
+            Html.RenderPartial("~/Views/Shared/_PartialBanners.cshtml", (List<Businessdevweb.Models.BannerSlider>)ViewBag.Banners);
+        }
+    }
+
+}
+@section Footer{
+    @{Html.RenderPartial("~/Views/Shared/_PartialFooter.cshtml");}
+
+}
+
+@section styles{
+    @if (ViewBag.Banners != null)
+    {
+        @Styles.Render("~/Content/Slider")
+    }
+}
+@section scripts{
+    @if (ViewBag.Banners != null)
+    {
+        @Scripts.Render("~/bundles/Slider")
+        <script>
+
+            $('.autoplay').slick({
+                dots: true,
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                rtl: true,
+
+            });
+        </script>
+    }
+
+}

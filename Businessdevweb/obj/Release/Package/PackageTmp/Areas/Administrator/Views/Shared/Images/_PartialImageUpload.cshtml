@@ -1,0 +1,45 @@
+﻿@model List<Businessdevweb.Areas.Administrator.Models.ImageSelectImgIdViewModel>
+<style>
+            .crop {
+            float: left;
+            margin: .5em 10px .5em 0;
+            overflow: hidden; /* this is important */
+            position: relative; /* this is important too */
+            border: 1px solid #000;
+            width: 206px;
+            height: 149px;
+        }
+            .crop img {
+                position: absolute;
+                top: -88px;
+                left: -41px;
+            }
+</style>
+@foreach (var item in Model)
+{
+    <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--12-col-phone mdl-cell--4-col-tablet mdl-card mdl-shadow--4dp">
+
+        <div class="mdl-card__title">
+
+            <h4 class="mdl-card__subtitle-text"> @item.Image.Title</h4>
+
+            <button id="@("m"+item.Image.Id)" class="mdl-card__menu mdl-button mdl-js-button mdl-button--mini-fab mdl-button--icon mdl-button--colored">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+                for="@("m"+item.Image.Id)">
+                <li><a class='mdl-menu__item' href='@Url.Action("Edit","Images",new { id=item.Image.Id})'>ویرایش</a></li>
+                <li><a class='mdl-menu__item' href='@Url.Action("Delete","Images",new { id=item.Id,TEntity=ViewData["TEntity"]})'>حذف</a></li>
+            </ul>
+
+        </div>
+        <div class="mdl-card__media">
+            <img src='@(item.Image.Path+item.Image.Name+item.Image.Ext)' style="width:100%"/>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <p>متن جایگزین: @item.Image.Alt</p>
+
+            <p>سایز: @item.Image.Size</p>
+        </div>
+    </div>
+}

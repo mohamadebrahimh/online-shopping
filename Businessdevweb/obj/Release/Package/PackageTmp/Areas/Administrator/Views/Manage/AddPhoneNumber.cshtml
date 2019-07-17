@@ -1,0 +1,36 @@
+﻿@model Businessdevweb.Models.AddPhoneNumberViewModel
+@{    ViewBag.Title = "ثبت شماره تلفن";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AddPhoneNumber", "Manage", FormMethod.Post, new { @class = "mdl-grid", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="mdl-cell mdl-cell--12-col mdl-color--grey-50">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <h4>برای ثبت شماره تلفن دکمه تایید را بفشارید!</h4>
+                
+                <hr />
+            </div>
+
+            @Html.ValidationSummary("", new { @class = "mdl-color-text--red" })
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+
+                @Html.EditorFor(model => model.Number, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+                @Html.LabelFor(model => model.Number, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "Number" })
+                @Html.ValidationMessageFor(model => model.Number, "", new { @class = "mdl-textfield__error" })
+
+            </div>
+
+            <div class="mdl-cell mdl-cell--12-col">
+                <input type="submit" value="تایید" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored " />
+                <a href='@(Url.Action("Index"))' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">بازگشت </a>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+
+}

@@ -1,0 +1,44 @@
+﻿@model List<Businessdevweb.Models.Color>
+@{
+    ViewBag.Title = "رنگهای موجود";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="mdl-grid">
+
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <a href='@Url.Action("Create","Colors")' class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" title="افزودن رنگ"><i class="material-icons">add</i>افزودن رنگ</a>
+            </div>
+            <table class="mdl-cell mdl-cell--12-col mdl-data-table  mdl-data-table--selectable mdl-shadow--2dp">
+                <thead>
+                    <tr>
+                        <th>رنگ</th>
+                        <th>@Html.DisplayNameFor(m => m[0].Value)</th>
+                        <th>@Html.DisplayNameFor(m => m[0].Name)</th>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td style='padding:0'><i class="material-icons" style='padding-top:0;padding-bottom:0;margin-bottom:0;margin-top:0;font-size:50px;vertical-align:middle;color:@(item.Value);'>stop</i></td>
+                            <td>@item.Value</td>
+                            <td>@item.Name</td>
+                            <td>
+                                <a href='@Url.Action("Edit","Colors",new { id=item.Id})' class="mdl-button mdl-js-button mdl-button--colored mdl-button--icon" title="ویرایش"><i class="material-icons" style="vertical-align:middle">mode_edit</i></a>
+                                <a href='@Url.Action("Delete","Colors",new { id=item.Id})' class="mdl-button mdl-js-button mdl-button--colored mdl-button--icon" title="حذف"><i class="material-icons" style="vertical-align:middle">delete</i></a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

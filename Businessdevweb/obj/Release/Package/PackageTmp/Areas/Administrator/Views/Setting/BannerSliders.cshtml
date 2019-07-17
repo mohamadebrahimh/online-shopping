@@ -1,0 +1,138 @@
+﻿@model List<Businessdevweb.Models.BannerSlider>
+@{
+    ViewBag.Title = "لیست بنرهای";
+    var i = 0;
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col" style="margin-bottom:0px;">
+                <a href='@(Url.Action("AddBanner"))' class="mdl-button mdl-js-button  mdl-js-ripple-effect mdl-button--primary ">بننر جدید </a>
+            </div>
+            <table class="mdl-cell mdl-cell--12-col mdl-data-table">
+                <thead class="mdl-color--blue-100">
+                    <tr>
+                        @*<th>@Html.DisplayNameFor(model => model[0].SelectedImages[0].Image.Title)</th>
+                            <th>@Html.DisplayNameFor(model => model[0].SelectedImages[0].Image.Alt)</th>*@
+                        <th>ردیف</th>
+                        <th>صفحه ضمیمه شده</th>
+                        <th>صفحه نمایش دهنده</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>@(++i)</td>
+                            <td>@item.Page.Title</td>
+                            <td>
+                                @if (item.IsPage)
+                {
+                                    <span>@item.DisplayedPage.Title</span>
+
+                                }
+                                @if (item.Setting != null)
+                                {
+                                    <span> و </span>
+                                    if (item.Setting.IsHome)
+                                    {
+                                        <span>@Html.DisplayNameFor(model => model[0].Setting.IsHome)</span>
+                                    }
+                                    else if (item.Setting.IsProductPage)
+                                    {
+                                        <span>@Html.DisplayNameFor(model => model[0].Setting.IsProductPage)</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <a href='@(Url.Action("BannerInActivate",new { id = item.Id, returnIdUrl=(item.Setting==null)?item.DisplayedPageId:item.SettingId}))'
+                                        title="غیر فعال شود؟"
+                                       class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--colored mdl-color-text--red ">
+                                        <i class="material-icons">visibility_off</i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href='@(Url.Action("BannerActivate",new { id = item.Id ,returnIdUrl=(item.Setting==null)?item.DisplayedPageId:item.SettingId}))'
+                                        title="فعال شود؟"
+                                       class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--colored mdl-color-text--green ">
+                                        <i class="material-icons ">visibility</i>
+                                    </a>
+                                }
+                                <a href='@(Url.Action("EditBanner",new { id = item.Id }))' title="ویرایش"
+                                   class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--primary ">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                                <a href='@(Url.Action("DeleteBanner",new { id = item.Id ,returnIdUrl=(item.Setting==null)?item.DisplayedPageId:item.SettingId}))'
+                                   title="حذف شود؟"
+                                   class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--primary ">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                                <a href='@(Url.Action("UploadBanner", new { id = item.Id }))' title="افزودن بنر"
+                                   class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--primary ">
+                                    <i class="material-icons">add_a_photo</i>
+                                </a>
+                            </td>
+                        </tr>
+
+                        foreach (var j in item.SelectedImages)
+                        {
+
+                            <tr>
+                                <td colspan="4">
+                                    <div class="mdl-grid">
+                                        <div class="mdl-cell mdl-cell--6-col">
+                                            <dl>
+                                                <dt>
+                                                    @Html.DisplayNameFor(m => m[0].SelectedImages[0].Image.Title)
+                                                </dt>
+                                                <dd>@j.Image.Title</dd>
+                                                <dt>
+                                                    @Html.DisplayNameFor(m => m[0].SelectedImages[0].Image.Alt)
+                                                </dt>
+                                                <dd>@j.Image.Alt</dd>
+                                            </dl>
+                                        </div>
+                                        <div class="mdl-cell mdl-cell--6-col">
+                                            <div style="position:absolute;z-index:2;display:block;top:inherit;padding:10px">
+                                                <a href='@(Url.Action("EditBannerFile", new { id = j.Image.Id, returnIdUrl = (item.Setting == null) ? item.DisplayedPageId : item.SettingId }))'
+                                                title="ویرایش"
+                                                class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--raised mdl-button--accent ">
+                                                <i class="material-icons">edit</i>
+                                                </a>
+                                                @if (!j.IsDefault)
+                                                {
+                                                    <a href='@(Url.Action("DeleteBannerFile", new { id = j.Image.Id }))' title="حذف تصویر"
+                                                       class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--raised mdl-button--accent ">
+                                                        <i class="material-icons">delete</i>
+                                                    </a>}
+                                            </div>
+                                            <img style="height:auto;width:100%" src="@(j.Image.Path+"phone/"+j.Image.Name+j.Image.Ext)" alt="" />
+
+                                        </div>
+                                    </div>
+
+                                </td>
+
+
+                            </tr>
+
+
+                        }
+
+
+                    }
+
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+</div>

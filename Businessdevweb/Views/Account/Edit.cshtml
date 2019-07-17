@@ -1,0 +1,228 @@
+﻿@model Businessdevweb.Models.ApplicationUser
+@{
+    ViewBag.Title = "ویرایش پروفایل";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="profile-user-page default">
+    <div class="container">
+        <div class="row">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h1 class="title-tab-content">ویرایش اطلاعات شخصی</h1>
+                        </div>
+                        <div class="content-section default">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h1 class="title-tab-content">حساب شخصی</h1>
+                                </div>
+                            </div>
+                            <form class="form-account" method="post" action="@Url.Action("Edit","Account")">
+                                @Html.AntiForgeryToken()
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">نام</div>
+                                        <div class="form-account-row">
+                                            @Html.TextBoxFor(m => m.FirstName, new { @class = "input-field text-right", @type = "text", @placeholder = "نام خود را وارد نمایید" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">نام خانوادگی</div>
+                                        <div class="form-account-row">
+                                            @Html.TextBoxFor(m => m.LastName, new { @class = "input-field text-right", @type = "text", @placeholder = "نام خانوادگی خود را وارد نمایید" })
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">شماره موبایل</div>
+                                        <div class="form-account-row">
+                                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "input-field text-right", @type = "text", @placeholder = "شماره همراه خود را وارد نمایید" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-default btn-lg">ذخیره</button>
+                                    <button class="btn btn-default btn-lg">انصراف</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-page-aside col-xl-3 col-lg-4 col-md-6 center-section order-1">
+                <div class="profile-box">
+
+
+                    <div class="profile-box-header">
+
+
+                        <div class="profile-box-avatar">
+                            <form class="ajaxForm" success-func="changeSuccess" id="form_Brand@(Model.Id)" action="/Account/ChangePicture" data-autoReset="false" enctype="multipart/form-data" method="post">
+
+
+
+                                <input data-show-loader="false" data-show-remove="false" type="file" name="file"
+                                       for="form_Brand@(Model.Id)" class="dropify" data-default-file="@(Model.ImageFile==null?"":"/Content/uploadFiles/Users/"+Model.ImageFile)" />
+                                <input type="submit" id="form_Brand@(Model.Id)_btn" style="display:none" />
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="profile-box-username">@Model.FirstName @Model.LastName</div>
+                    <form action="@Url.Action("LogOff","Account")" method="post" id="logOff-form">
+                        @Html.AntiForgeryToken()
+                    </form>
+                    <div class="profile-box-tabs">
+                        <a href="@Url.Action("Index","Manage")" class="profile-box-tab profile-box-tab-access">
+                            <i class="now-ui-icons ui-1_lock-circle-open"></i>
+                            تغییر رمز
+                        </a>
+
+                        <a onclick="$('#logOff-form').submit();" class="profile-box-tab profile-box-tab--sign-out">
+                            <i class="now-ui-icons media-1_button-power"></i>
+                            خروج از حساب
+                        </a>
+
+                    </div>
+                </div>
+                <div class="responsive-profile-menu show-md">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-navicon"></i>
+                            حساب کاربری شما
+                        </button>
+ 
+                    </div>
+                </div>
+                <div class="profile-menu hidden-md">
+                    <div class="profile-menu-header">حساب کاربری شما</div>
+                    <ul class="profile-menu-items">
+                        <li>
+                            <a href="profile.html" class="active">
+                                <i class="now-ui-icons users_single-02"></i>
+                                پروفایل
+                            </a>
+                        </li>
+                        <li>
+                            <a href="profile-orders.html">
+                                <i class="now-ui-icons shopping_basket"></i>
+                                همه سفارش ها
+                            </a>
+                        </li>
+                        <li>
+                            <a href="profile-orders-return.html">
+                                <i class="now-ui-icons files_single-copy-04"></i>
+                                درخواست مرجوعی
+                            </a>
+                        </li>
+                        <li>
+                            <a href="profile-favorites.html">
+                                <i class="now-ui-icons ui-2_favourite-28"></i>
+                                لیست علاقمندی ها
+                            </a>
+                        </li>
+                        <li>
+                            <a href="profile-personal-info.html">
+                                <i class="now-ui-icons business_badge"></i>
+                                اطلاعات شخصی
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Styles{
+    <link href="~/Content/lib/dropify/dist/css/dropify.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .file-icon:before {
+            margin: 0 !important;
+            padding: 0
+        }
+
+        .dropify-message {
+            top: unset !important;
+            -webkit-transform: translateY(0%) !important;
+            transform: translateY(0%) !important;
+        }
+
+        main.profile-user-page .profile-box-avatar img {
+            left: unset !important;
+        }
+    </style>
+    <link href="~/Content/lib/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css">
+}
+@section Scripts{
+    <!-- Bootstrap Daterangepicker JavaScript -->
+    <script src="~/Content/lib/dropify/dist/js/dropify.min.js"></script>
+
+    <!-- Form Flie Upload Data JavaScript -->
+    <script src="~/Content/js/form-file-upload-data.js"></script>
+    <script src="~/Content/lib/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/Content/js/AjaxHelper.js"></script>
+    <script>
+        $('.dropify').dropify({
+            tpl: {
+                wrap: '<div class="dropify-wrapper" style="padding:0;margin:0 auto;width:60px!important; height:60px !important ;border-radius:50%"></div>',
+                loader: '',
+                message: '<div class="dropify-message"><span class="file-icon" /></div>',
+                preview: '<div class="dropify-preview"><span class="dropify-render"></span></div>',
+                filename: '',
+                clearButton: '',
+                errorLine: '',
+                errorsContainer: ''
+            }
+        });
+
+    </script>
+    <script>
+
+        function changeSuccess(data) {
+
+            //examples
+            if (data.type == "success") {
+                swal({
+                    title: "آفرین!",
+                    type: "success",
+                    text: data.result,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            } else {
+                swal({
+                    title: "خطا!",
+                    type: "error",
+                    text: data.result,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+            return false;
+        }
+
+        var elements = document.querySelectorAll(".dropify[name=file]");
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].addEventListener("change",
+                function (eve) {
+
+
+
+                    let el = eve.currentTarget;
+                    let form = el.getAttribute("for");
+                    eve.preventDefault();
+                    document.getElementById(form + "_btn").click();
+
+                });
+        }
+    </script>
+}

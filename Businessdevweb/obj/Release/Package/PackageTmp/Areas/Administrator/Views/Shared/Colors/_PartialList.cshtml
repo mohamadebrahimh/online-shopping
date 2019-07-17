@@ -1,0 +1,46 @@
+﻿
+@model List<Businessdevweb.Models.Color>
+<h4 class="mdl-dialog__title">رنگهای موجود</h4>
+
+<div class="mdl-dialog__content" style="padding:5px;margin:0;max-height:250px;overflow-y:auto">
+
+    <div class="mdl-grid mdl-grid--no-spacing">
+        <input type="hidden" id="ProductId" value="@ViewBag.ProductId" />
+        <table class="mdl-cell mdl-cell--12-col mdl-data-table mdl-js-data-table">
+            <thead>
+                <tr>
+                    <th>رنگ</th>
+                    <th>@Html.DisplayNameFor(m => m[0].Name)</th>
+                    <td>عملیات</td>
+                </tr>
+               
+            </thead>
+            <tbody> 
+                @foreach (var item in Model)
+            {
+                    <tr class='@((item.SelectedColors.Where(m => m.ProductId == ViewBag.ProductId).Count() > 0)?"mdl-color--green-50":"")'>
+                        <td style='padding:0'><i class="material-icons" style='padding-top:0;padding-bottom:0;margin-bottom:0;margin-top:0;font-size:50px;vertical-align:middle;color:@(item.Value);'>stop</i></td>
+                        <td>@item.Name</td>
+                        <td>
+                            @if (item.SelectedColors.Where(m => m.ProductId == ViewBag.ProductId).Count() > 0)
+                                {
+                                    <button id="NoColor" onclick='NoColor("@item.Id","@ViewBag.ProductId");' class="mdl-button mdl-js-button mdl-button--colored mdl-button--icon" title="حذف از رنگهای محصول"><i class="material-icons" style="vertical-align:middle">remove</i></button>
+                                }
+                                else
+                                {
+                                    <button id="SetColor" onclick='SetColor("@item.Id","@ViewBag.ProductId");' class="mdl-button mdl-js-button mdl-button--colored mdl-button--icon" title="افزودن به رنگهای محصول"><i class="material-icons" style="vertical-align:middle">add</i></button>
+
+                                }
+                            
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="mdl-dialog__actions">
+    <button type="button" class="mdl-button close">انجام شد</button>
+</div>
+

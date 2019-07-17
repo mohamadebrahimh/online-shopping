@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link href="~/favicon.png" rel="shortcut icon">
+
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/admincss")
+    @RenderSection("styles", required: false)
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <meta name="description" content="The description of my page" />
+</head>
+<body class="direction-rtl">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+             mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <h1 class="mdl-layout__title">@ViewBag.Title</h1>
+                <div class="mdl-layout-spacer"></div>
+                @*<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                      mdl-textfield--floating-label mdl-textfield--align-right">
+                        <label class="mdl-button mdl-js-button mdl-button--icon"
+                               for="fixed-header-drawer-exp">
+                            <i class="material-icons">search</i>
+                        </label>
+                        <div class="mdl-textfield__expandable-holder">
+                            <input class="mdl-textfield__input" type="text" name="sample"
+                                   id="fixed-header-drawer-exp">
+                        </div>
+                    </div>*@
+
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">@ViewBag.drawer_Title</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="@Url.Action("Index", "Manage", routeValues: new { area = "Administrator" })" title="مدیریت حساب"><i class="material-icons" style="margin:0 10px">face</i>سلام  @User.Identity.GetUserName()</a>
+                <a class="mdl-navigation__link" href="@Url.Action("index","Home")"><i class="material-icons" style="margin:0 10px">home</i>خانه</a>
+                <a class="mdl-navigation__link" href="@Url.Action("index","ProductCategories")"><i class="material-icons" style="margin:0 10px">list</i>دسته بندی محصولات</a>
+                <a class="mdl-navigation__link" href="@Url.Action("index","Products")"><i class="material-icons" style="margin:0 10px">shop</i>محصولات</a>
+                <a class="mdl-navigation__link" href="@Url.Action("index","Colors")"><i class="material-icons" style="margin:0 10px">color_lens</i>رنگها</a>
+                <a class="mdl-navigation__link" href="@Url.Action("index","PageCategories")"><i class="material-icons" style="margin:0 10px">list</i>دسته بندی صفحات</a>
+                <a class="mdl-navigation__link" href="@Url.Action("index","Pages")"><i class="material-icons" style="margin:0 10px">pages</i>صفحات</a>
+
+                <a class="mdl-navigation__link" href="@Url.Action("index","Setting")"><i class="material-icons" style="margin:0 10px">settings</i>تنظیمات</a>
+                @using (Html.BeginForm("LogOff", "Account", new { Area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <a class="mdl-navigation__link" href="javascript:document.getElementById('logoutForm').submit()"><i class="material-icons" style="margin:0 10px">exit_to_app</i>خروج</a>
+
+                }
+                
+            </nav>
+
+        </div>
+        <main class="mdl-layout__content mdl-color--grey-300">
+            <div class="page-content">   @RenderBody()</div>
+        </main>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/Material")
+    <script src="~/Scripts/JavaScriptHelper.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

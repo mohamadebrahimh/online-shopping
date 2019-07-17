@@ -1,0 +1,83 @@
+﻿@model Businessdevweb.Models.ProductFeatures
+
+@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var product =  (Businessdevweb.Models.Product)ViewData["Product"];
+    
+    ViewBag.Title = "افزودن خصوصیت";
+}
+
+<!-- Title -->
+<div class="row heading-bg pull-left rtl">
+
+    <!-- Breadcrumb -->
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+        <ol class="breadcrumb">
+            <li></li>
+            <li><a href="@Url.Action("Index","Dashboard",new { area = "Admin" })"><span>داشبورد</span></a></li>
+
+                <li><a href="@Url.Action("Index","ProductFeatures",new { area="Admin",id=product.Id})"><span>@("خصوصیات " + product.FirstTitle)</span></a></li>
+            <li class="active"><span>@ViewBag.Title </span></li>
+        </ol>
+    </div>
+    <!-- /Breadcrumb -->
+</div>
+<!-- /Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default card-view">
+            <div class="panel-heading">
+                <div class="pull-left">
+                    <h5 class="txt-dark">@ViewBag.Title </h5>
+
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-wrapper collapse in">
+                <div class="panel-body">
+                    <div class="form-wrap">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                @Html.ValidationSummary("", htmlAttributes: new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-sm-12 row">
+                                <div class="form-group col-sm-6">
+                                    @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                    @Html.TextBoxFor(m => m.Name, htmlAttributes: new { @class = "form-control" })
+
+
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    @Html.LabelFor(m => m.Value, htmlAttributes: new { @class = "control-label mb-10 text-right" })
+                                    @Html.TextBoxFor(m => m.Value, htmlAttributes: new { @class = "form-control" })
+
+
+                                </div>
+                            </div>
+                 
+                            @Html.Hidden("ProductId",product.Id)
+                                <div class="form-group mb-0">
+                                    <button type="submit" class="btn btn-success btn-anim"><i class="icon-rocket"></i><span class="btn-text">ذخیره</span></button>
+                                </div>
+                                }
+                            </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Styles{
+    <!-- bootstrap-select CSS -->
+}
+
+@section Scripts{
+    <!-- Bootstrap Select JavaScript -->
+
+ 
+}

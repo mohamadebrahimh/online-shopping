@@ -1,0 +1,88 @@
+﻿@model Businessdevweb.Models.Product
+
+@{
+    ViewBag.Title = "حذف محصول";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<h3>برای حذف اطمینان دارید؟</h3>
+<div class="mdl-grid">
+    <h4>محصول</h4>
+    <hr />
+    <dl class="mdl-cell mdl-cell--12-col">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SecondTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SecondTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Model)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Brand)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Brand)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Visit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Visit)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

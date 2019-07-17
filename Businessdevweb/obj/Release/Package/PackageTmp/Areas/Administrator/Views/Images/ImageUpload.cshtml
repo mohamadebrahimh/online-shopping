@@ -1,0 +1,233 @@
+﻿@model Businessdevweb.Areas.Administrator.Models.ImageUploadViewModel
+@{
+    
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <style>
+                .mask {
+            background: white;
+            opacity: 0.7;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index: 1000;
+        }
+
+        .load {
+            position: absolute;
+            display: block;
+            width: 280px; /*image width */
+            height: 150px; /*image height */
+            top: 25%;
+            right: calc(50% - 140px);
+            display: none;
+            z-index: 1001;
+        }
+
+    </style>
+    }
+
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+
+                <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone mdl-shadow--2dp">
+                    <form id="formFile" class="mdl-grid ">
+                        <input type="hidden" name="id" id="id" value="@ViewData["id"]" />
+                        <input type="hidden" name="TEntity" id="TEntity" value="@ViewData["TEntity"]" />
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col ">
+                            @Html.DropDownList("Position", (SelectList)ViewBag.position,"انتخاب مکان تصویر", new { @class = "mdl-textfield__input",id= "Position" })
+                        </div>
+                        <div id="formHiden">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col ">
+                                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "Title" })
+
+                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+
+                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "mdl-textfield__error" })
+                            </div>
+
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col ">
+                                @Html.LabelFor(model => model.Alt, htmlAttributes: new { @class = "mdl-textfield__label ", @for = "Alt" })
+
+                                @Html.EditorFor(model => model.Alt, new { htmlAttributes = new { @class = "mdl-textfield__input" } })
+
+                                @Html.ValidationMessageFor(model => model.Alt, "", new { @class = "mdl-textfield__error" })
+                            </div>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label title="انتخاب تصاویر">
+                                    <input class="mdl-textfield__input" type="file" id="file" name="file" accept="image/*">
+                                </label>
+
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <button type="submit" class="mdl-button mdl-js-button mdl-button--colored">بارگذاری</button>
+                                <button type="reset" class="mdl-button mdl-js-button mdl-button--colored">حالت اولیه</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone mdl-shadow--2dp">
+
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--12-col" style="border-bottom:1px solid rgba(0, 0, 0, 0.20)"><h2 class="mdl-typography--title">وضعیت ارسال تصویر</h2></div>
+                        <div class="message mdl-cell mdl-cell--12-col"></div>
+                    </div>
+                </div>
+            
+            <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-grid" id="result">
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+<div class="load" style="text-align:center">
+    <img src="~/Content/Images/dayloading.gif" style="margin:0 auto;height:auto;width:300px;" />
+    <h5 style="color:#000000;line-height:30px">با تشکر از صبر و شکیبایی شما، درخواست شما در حال پیگیری است</h5>
+</div>
+
+<div class="mask"></div>
+    <script>
+        if (document.getElementById('result').childElementCount >= 5) {
+            $("#formHiden").fadeOut();
+            $('.message').html('<p style="color:red">تعداد مجاز برای بارگذاری تصویر 5 عدد می باشد.</p><p style="color:blue">با تشکر</p>');
+        }else{
+            $("#formHiden").fadeIn();
+        }
+        $("#Position").change(function (e) {
+            if ($("#Position").val() === "") {
+                $('#result').html("");
+                return 0;
+            }
+            $('.mask').fadeIn();
+            $('.load').fadeIn();
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action(actionName:"ImageLoading",controllerName: "Images")',
+                type: "post",
+                data: {id:document.getElementById("id").value,TEntity:document.getElementById("TEntity").value,Position:$("#Position").val()},
+                dataType: "html",
+
+                success: function (result) {
+                    $('.message').html('<p style="color:green">تصاویر با موفقیت بارگذاری گردید.</p>').fadeIn().delay(5000).fadeOut();
+                    $('#result').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    if (document.getElementById('result').childElementCount >= 5) {
+                        $("#formHiden").fadeOut();
+                        $('.message').html('<p style="color:red">تعداد مجاز برای بارگذاری تصویر 5 عدد می باشد.</p><p style="color:blue">با تشکر</p>');
+                    }else{
+                        $("#formHiden").fadeIn();
+                    }
+
+                },
+                complete: function () {
+                    $('.mask').delay(2000).fadeOut();
+                    $('.load').delay(2000).fadeOut();
+                }
+            });
+        });
+
+        $("#formFile").submit(function (e) {
+
+            e.preventDefault();
+            if ($("#Alt").val() === "" || $("#Title").val() === "" || $("#file").val() === "" || $("#Position").val()==="") {
+                $('.message').html("");
+                if ($("#Position").val()==="") {
+                    $('.message').append('<p style="color:red">انخاب مکان تصویر الزامیست.</p>').fadeIn();
+                }
+                if ($("#file").val() === "") {
+                    $('.message').append('<p style="color:red">افزودن تصویر الزامیست.</p>').fadeIn();
+                }
+                if ($("#Alt").val() === "") {
+                    $('.message').append('<p style="color:red">وارد کردن (Alt) متن جایگزین الزامیست.</p>').fadeIn();
+                }
+                if ($("#Title").val() === "") {
+                    $('.message').append('<p style="color:red">وارد کردن عنوان تصویر الزامیست.</p>').fadeIn();
+                }
+                $('.message').delay(5000).fadeOut();
+            }
+            else if ($("#Alt").val() != "" && $("#Title").val() != "" && $("#file").val() != "" && $("#Position").val()!="")
+            {
+                $('.mask').fadeIn();
+                $('.load').fadeIn();
+                var formdata = new FormData(this);
+                $.ajax({
+                    url: '@Url.Action(actionName:"ImageUpload",controllerName: "Images")',
+                    type: "post",
+                    data: formdata,
+                    mimeTypes: "multipart/form-data",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (result) {
+                        switch (result) {
+                            case "Error":
+
+                                $('.message').html('<p style="color:red">خطایی رخ داده است! با پشتیبانی درمیان بگذارید.</p><p style="color:blue">با تشکر</p>').fadeIn().delay(5000).fadeOut();
+                                break;
+                            case "IsMax":
+                                    $("#formHiden").fadeOut();
+                                    $('.message').html('<p style="color:red">تعداد مجاز برای بارگذاری تصویر 5 عدد می باشد.</p><p style="color:blue">با تشکر</p>');
+       break;
+                            case "InValid":
+                                
+                                    $('.message').html("");
+                                    if ($("#file").val() === "") {
+                                        $('.message').append('<p style="color:red">افزودن تصویر الزامیست.</p>').fadeIn();
+                                    }
+                                    if ($("#Alt").val() === "") {
+                                        $('.message').append('<p style="color:red">وارد کردن (Alt) متن جایگزین الزامیست.</p>').fadeIn();
+                                    }
+                                    if ($("#Title").val() === "") {
+                                        $('.message').append('<p style="color:red">وارد کردن عنوان تصویر الزامیست.</p>').fadeIn();
+                                    }
+                                    $('.message').delay(5000).fadeOut();
+                                
+                                    break;
+                            case "Exists":
+                                $('.message').html('<p style="color:red">تصویری با این عنوان تصویر قبلا ذخیره شده است؛ لطفا عنوان تصویر را تغییر داده و دوباره امتحان نمائید.</p>').fadeIn();
+                                break;
+                            default:
+                                $('.message').html('<p style="color:green">تصویر با موفقیت ارسال گردید.</p>').fadeIn().delay(5000).fadeOut();
+                                var position = $("#Position").val();
+                                document.getElementById("formFile").reset();
+                                $("#Position").val(position);
+                                $('#result').append(result);
+                                componentHandler.upgradeAllRegistered();
+                                if (document.getElementById('result').childElementCount >= 5) {
+                                    $("#formHiden").fadeOut();
+                                    $('.message').html('<p style="color:red">تعداد مجاز برای بارگذاری تصویر 5 عدد می باشد.</p><p style="color:blue">با تشکر</p>');
+                                }else{
+                                    $("#formHiden").fadeIn();
+                                }
+                                break;
+                        }
+
+                    },
+                    erorr: function () {
+                        $('.message').html('<p style="color:red">خطایی رخ داده است! با پشتیبانی درمیان بگذارید.</p><p style="color:blue">با تشکر</p>').fadeIn().delay(5000).fadeOut();
+                    },
+                    complete: function () {
+                        $('.mask').delay(2000).fadeOut();
+                        $('.load').delay(2000).fadeOut();
+
+                    }
+
+                });
+            }
+
+
+        })
+    </script>
+
+}

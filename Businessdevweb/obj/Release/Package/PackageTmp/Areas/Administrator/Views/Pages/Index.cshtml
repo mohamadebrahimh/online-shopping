@@ -1,0 +1,106 @@
+﻿@model List<Businessdevweb.Models.Page>
+@{
+    ViewBag.Title = "لیست صفحات";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col" style="margin-bottom:0px;">
+                <a href='@(Url.Action("Create"))' class="mdl-button mdl-js-button  mdl-js-ripple-effect mdl-button--primary "><i class="material-icons">note_add</i> صفحه جدید </a>
+
+            </div>
+            <script>
+                
+            </script>
+            <table class="mdl-data-table mdl-cell mdl-cell--12-col">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model[0].Title)
+                        </th>
+                        <th>
+                            <span>نام دسته</span>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Title</td>
+                            <td>@item.PageCategory.Title</td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <a href='@(Url.Action("InActivate",new { id = item.Id }))' title="غیر فعال شود؟"
+                                       class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--colored mdl-color-text--red ">
+                                        <i class="material-icons">visibility_off</i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href='@(Url.Action("Activate",new { id = item.Id }))' title="فعال شود؟"
+                                       class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--colored mdl-color-text--green ">
+                                        <i class="material-icons ">visibility</i>
+                                    </a>
+                                }
+
+                                <button id="@item.Id"
+                                        class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--colored  ">
+                                    <i class="material-icons">more_vert</i>
+                                </button>
+                                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+                                    for="@item.Id">
+                                    <li>
+                                        <a href='@(Url.Action("Edit",new { id = item.Id }))' title="ویرایش"
+                                           class="mdl-menu__item">
+                                            <i class="material-icons" style="vertical-align:middle;margin-left:10px">edit</i><span> ویرایش</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@(Url.Action("Delete",new { id = item.Id }))' title="حذف شود؟"
+                                           class="mdl-menu__item">
+                                            <i class="material-icons" style="vertical-align:middle;margin-left:10px">delete</i><span> حذف شود؟</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@(Url.Action("ImageUpload", new { id = item.Id }))' title="تصاویر"
+                                           class="mdl-menu__item">
+                                            <i class="material-icons" style="vertical-align:middle;margin-left:10px">photo_library</i><span> تصاویر</span>
+                                        </a>
+                                    </li>
+                                    @if (item.IsDisplayedPage)
+                                    {
+                                    <li>
+                                        <a href='@(Url.Action("AddBanner", "Setting", new { id = item.Id }))' title="افزودن بنر"
+                                           class="mdl-menu__item">
+                                            <i class="material-icons" style="vertical-align:middle;margin-left:10px">add_a_photo</i><span> افزودن بنر</span>
+                                        </a>
+                                    </li>
+                                        if (item.DisplayedPages.Count > 0 )
+                                        {
+                                    <li>
+                                        <a href='@(Url.Action("BannerSliders", "Setting", new { id = item.Id }))' title="لیست بنرها"
+                                           class="mdl-menu__item">
+                                            <i class="material-icons" style="vertical-align:middle;margin-left:10px">photo</i><span> لیست بنرها</span>
+                                        </a>
+                                    </li>
+                                        }
+                                    }
+                                </ul>
+
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    
+
+    }

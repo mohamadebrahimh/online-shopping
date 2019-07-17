@@ -1,0 +1,173 @@
+﻿@model Businessdevweb.Models.Page
+@{ 
+    ViewBag.Title = Model.Title;
+    ViewBag.MetaDescription = Model.MetaDescription;
+    ViewBag.Metakeyword = Model.MetaKeyword;
+    Layout = "~/Views/Shared/_LayoutPageDetails.cshtml";
+    ViewBag.Url = ("http://DayTahrir/Pages/"+Model.Code+"/"+ Model.Name);
+}
+<div class="demo-crumbs mdl-color-text--grey-500">
+    @((Model.PageCategory.Parent != null) ? Model.PageCategory.Parent.Title + " > " : "") @(Model.PageCategory.Title)
+</div>
+<h1 class="mdl-typography--title">
+    @Model.Title
+</h1>
+@{
+    if (Model.SelectedImages.Count > 0)
+    {
+        var pic = (from i in Model.SelectedImages
+                   where i.Position == "Primary"
+                   select new
+                   {
+                       i.Image.Path,
+                       i.Image.Title,
+                       i.Image.Alt,
+                       i.Image.Ext,
+                       i.Image.Name
+                   }).FirstOrDefault();
+        ViewBag.Image = pic.Path + "phone/" + pic.Name + pic.Ext;
+        if (pic != null)
+        {
+            <picture>
+                <!--<source srcset="Content/GoldLogo.png" media="(max-width: 1024px) ">-->
+                <source srcset="@(pic.Path + "desktop/" + pic.Name + pic.Ext)" media="(min-width: 760px) ">
+                <source srcset="@(pic.Path + "phone/" + pic.Name + pic.Ext)" media="(min-width: 180px)">
+                <img src="" style="height:auto;width:100%" title="@pic.Title" alt="@pic.Alt" />
+            </picture>
+
+        }
+        else
+        {
+            <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@Model.Title" alt="@Model.Title">
+        }
+
+    }
+    else
+    {
+        <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@Model.Title" alt="@Model.Title">
+    }
+}
+
+<p style="margin:10px 0 20px ; padding :10px;line-height:50px; font-size:large;font-weight:200;" class="mdl-color--grey-100">
+    @Model.Brief
+</p>
+@if (Model.IsContinue)
+{
+    <div>
+        @Html.Raw(Model.Content)
+    </div>
+}
+@section LeftBox{
+<style>
+    .sospcs-card__media {
+        display: inline-block;
+        width: 100px;
+    }
+
+    .sospcs-card__title {
+        padding: unset;
+        line-height: 25px;
+        display: inline-block;
+        width: calc(100%-100px);
+        overflow: hidden;
+    }
+</style>
+    @foreach (var item in (List<Businessdevweb.Models.Page>)ViewBag.Pages)
+    {
+        <div class="mdl-cell mdl-cell--12-col mdl-card  mdl-color--grey-50 mdl-shadow--4dp" style="min-height:0;height:auto;display:block">
+            <div class="mdl-grid mdl-grid--no-spacing">
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet" style="border-bottom:1px solid rgba(0, 0, 0, 0.20);max-height:60px">
+                    <div class="mdl-card__media sospcs-card__media">
+                        @{
+                            if (item.SelectedImages.Count() > 0)
+                            {
+                                var pic = (from i in item.SelectedImages
+                                           where i.Position == "Primary"
+                                           select new
+                                           {
+                                               i.Image.Path,
+                                               i.Image.Title,
+                                               i.Image.Alt,
+                                               i.Image.Ext,
+                                               i.Image.Name
+                                           }).FirstOrDefault();
+                                if (pic != null)
+                                {
+                                    <picture>
+                                        <!--<source srcset="Content/GoldLogo.png" media="(max-width: 1024px) ">-->
+                                        @*<source srcset="@(pic.Path + "desktop/" + pic.Name + pic.Ext)" media="(min-width: 760px) ">*@
+                                        <source srcset="@(pic.Path + "phone/" + pic.Name + pic.Ext)">
+                                        <img src="" style="height:auto;width:100%" title="@pic.Title" alt="@pic.Alt" />
+                                    </picture>
+                                }
+                                else
+                                {
+                                    <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@item.Title" alt="@item.Title">
+                                }
+                            }
+                            else
+                            {
+                                <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="@item.Title" alt="@item.Title">
+                            }
+                        }
+                    </div>
+                    <div class="mdl-card__title sospcs-card__title">
+                        <h4 class="mdl-card__title-text" style="font-size:15px;padding:0 3px;">
+                        <a href='~/Pages/@(item.Code.ToString() + "/" + item.Name)' style="text-decoration:none">
+                            @item.Title
+                        </a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-card__supporting-text mdl-cell--hide-desktop mdl-cell--hide-phone">
+                    <span>
+                        @(item.Brief)
+                    </span>
+                </div>
+            </div>
+        </div>
+                            }
+
+    }
+@section Banners{
+
+
+    @{
+        if (Model.DisplayedPages != null&&Model.DisplayedPages.Count()>0)
+        {
+            Html.RenderPartial("~/Views/Shared/_PartialBanners.cshtml",Model.DisplayedPages);
+        }
+    }
+
+}
+@section Footer{
+    @{Html.RenderPartial("~/Views/Shared/_PartialFooter.cshtml");}
+
+}
+
+@section styles{
+    @if (Model.DisplayedPages != null && Model.DisplayedPages.Count() > 0)
+    {
+        @Styles.Render("~/Content/Slider")
+    }
+}
+@section scripts{
+    @if (Model.DisplayedPages != null && Model.DisplayedPages.Count() > 0)
+    {
+        @Scripts.Render("~/bundles/Slider")
+        <script>
+
+            $('.autoplay').slick({
+                dots: true,
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                rtl: true,
+
+            });
+        </script>
+    }
+
+}

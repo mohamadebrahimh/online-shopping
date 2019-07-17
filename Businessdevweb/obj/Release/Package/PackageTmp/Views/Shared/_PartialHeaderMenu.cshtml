@@ -1,0 +1,131 @@
+﻿@model List<Businessdevweb.Models.ProductCategory>
+@if (Model.Count > 0)
+{
+    <nav class="mdl-navigation mdl-color-text--black mdl-color--grey-200" style="margin:0 20px">
+        @foreach (var item in Model.OrderBy(m => m.Index))
+        {
+            <button id="@item.Id" class="mdl-navigation__link mdl-color-text--black">@item.Title</button>
+            if (item.Categories.Count > 0)
+            {
+                <div class="menu-cat" for="@item.Id">
+                    <div class="mdl-color--blue-grey-100">
+                    <div class="menu-cat-item ">
+                        @foreach (var Categoryitem in item.Categories.OrderBy(m => m.Index))
+                        {
+                            <button id="@Categoryitem.Id" class="mdl-navigation__link mdl-color-text--black">@Categoryitem.Title</button>
+                        }
+                        @foreach (var Categoryitem in item.Categories.OrderBy(m => m.Index))
+                        {
+                            <div class="menu-cat-item-childs mdl-color--blue-grey-100" for="@Categoryitem.Id">
+                             @if (Categoryitem.Categories.Count() > 0)
+                             {
+                                   <div class="mdl-grid " style="margin:0">
+                                    @foreach (var subCat in Categoryitem.Categories.OrderBy(m => m.Index))
+                            {
+                                        <div class="mdl-cell mdl-cell--2-col-desktop mdl-color-text--black">
+                                                <h6><a style="text-decoration:none" href="~/Products/@(subCat.Name)">@subCat.Title</a></h6>
+                                                <ul>
+                                                    @foreach (var i in subCat.Categories.OrderBy(m => m.Index))
+                                                    {
+                                                        <li><a style="text-decoration:none" href='~/Products/@(i.Name)'>@i.Title</a></li>
+                                                    }
+                                                </ul>
+                                        </div>
+                                    }
+                                </div>
+                             }
+                             else
+                             {
+                                
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--12-col">
+    <h5><a style="text-decoration:none" href="~/Products/@(Categoryitem.Name)">محصولات بیشتر دسته @Categoryitem.Title</a></h5>
+</div>
+                                    @foreach (var i in Categoryitem.Products.Take(6))
+{
+                                        <div class="mdl-cell mdl-cell--2-col">
+                                            <div class="mdl-card__title">
+                                                <a href='~/Product/@(i.SecondTitle.Replace(" ", "-").Replace("/", "").Replace(".", "") + "/" + i.Name)'
+                                                   class="mdl-card__title-text" style="text-decoration:unset;font-size:medium;line-height:1;line-break:loose;text-overflow:ellipsis">@(i.FirstTitle)</a>
+                                            </div>
+                                            <div class="mdl-card__media">
+                                                @{
+                                                    if (i.SelectedImages.Count() > 0)
+                                                    {
+                                                        var pic = (from j in i.SelectedImages
+                                                                   where j.Position == "Main"
+                                                                   select new
+                                                                   {
+                                                                       j.Image.Path,
+                                                                       j.Image.Title,
+                                                                       j.Image.Alt,
+                                                                       j.Image.Ext,
+                                                                       j.Image.Name
+                                                                   }).FirstOrDefault();
+                                                        if (pic != null)
+                                                        {
+                                                            <picture>
+                                                                <!--<source srcset="Content/GoldLogo.png" media="(max-width: 1024px) ">-->
+                                                                <source srcset="@(pic.Path + pic.Name + pic.Ext)" media="(min-width: 760px) ">
+                                                                <source srcset="@(pic.Path + pic.Name + pic.Ext)" media="(min-width: 180px)">
+                                                                <img src="" style="height:auto;width:100%" title="@pic.Title" alt="@pic.Alt" />
+                                                            </picture>
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="دی تحریر | تصویر به زودی بارگذاری می شود" alt="دی تحریر | تصویر به زودی بارگذاری می شود">
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Content/NoPic.jpg" style="height:auto;width:100%" title="دی تحریر | تصویر به زودی بارگذاری می شود" alt="دی تحریر | تصویر به زودی بارگذاری می شود">
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="mdl-card__supporting-text">
+                                                <span>
+                                                    قیمت برای شما:
+                                                </span>
+                                                <span>
+                                                    @((i.Prices.Count() > 0) ? i.Prices.OrderBy(m => m.InsertTime).LastOrDefault().Price.ToString() + " ريال" : "بزودی")
+                                                </span>
+                                            </div>
+                                            <div class="mdl-card__actions mdl-card--border">
+                                                <a href='~/Product/@(((i.SecondTitle!=null)?i.SecondTitle.Replace(" ","-").Replace("/","").Replace(".","")+"/":"")+i.Name)'
+                                                   class="mdl-button mdl-button--accent mdl-button--raised mdl-js-button mdl-js-ripple-effect">جزئیات</a>
+                                            </div>
+                                        </div>
+                                                    }
+
+                                </div>
+                                                    }
+                            </div>
+                        }
+                    </div>
+                    </div>
+                </div>
+            }
+        }
+    </nav>
+}
+    @*<div class="menu-cat-item">
+            <button id="ShoppingCart2" class="mdl-navigation__link">
+            </button>
+            <div class="menu-cat-item-childs" for="ShoppingCart2">
+            </div>
+        </div>*@
+    @section scripts{
+        <script>
+            function SendAJAX(Method, data, Url, successFunction) {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        successFunction(this.responseText);
+                    }
+                };
+                xmlhttp.open(Method, Url, true);
+                xmlhttp.send(data);
+            }
+
+        </script>
+    }

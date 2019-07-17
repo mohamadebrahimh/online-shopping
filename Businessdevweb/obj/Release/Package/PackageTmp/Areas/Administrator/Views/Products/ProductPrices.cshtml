@@ -1,0 +1,222 @@
+﻿@model List<Businessdevweb.Areas.Administrator.Models.ProductPrices>
+@{
+  
+    ViewBag.Title = "لیست قیمت " +ViewBag.ProductTitle;
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <style>
+        .mask {
+            background: white;
+            opacity: 0.7;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index: 1000;
+        }
+
+        .load {
+            position: absolute;
+            display: block;
+            width: 280px; /*image width */
+            height: 150px; /*image height */
+            top: 25%;
+            right: calc(50% - 140px);
+            display: none;
+            z-index: 1001;
+        }
+    </style>
+}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <div class="mdl-cell mdl-cell--12-col">
+
+                <button type="button"  title="قیمت جدید" onclick='AddPrice("@ViewBag.ProductId");'
+                   class="mdl-button mdl-js-button  mdl-js-ripple-effect mdl-button--colored  ">
+                    <i class="material-icons">add</i> <span>قیمت جدید</span>
+                </button>
+                <a href='@(Url.Action("Details",new { id = ViewBag.CategoryId }))' title="بازگشت"
+                   class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">
+                    بازگشت
+                </a>
+            </div>
+            <table class="mdl-data-table mdl-cell mdl-cell--12-col">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m[0].InsertTime)</th>
+                        <th>@Html.DisplayNameFor(m=>m[0].UpdateTime)</th>
+                        <th>@Html.DisplayNameFor(m=>m[0].Price)</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(Businessdevweb.Models.PersianDateExtensionMethods.ToPeString(item.InsertTime, "yy-MMMM-dd  hh:mm"))</td>
+                            <td>@(Businessdevweb.Models.PersianDateExtensionMethods.ToPeString(item.UpdateTime, "yy-MMMM-dd  hh:mm"))</td>
+                            <td>@item.Price</td>
+                            <td>
+
+                                <a href='@(Url.Action("DeletePrice",new { id = item.Id }))' title="حذف شود؟"
+                                   class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--colored mdl-color-text--red ">
+                                    <i class="material-icons">delete</i>
+                                </a>
+
+                                <button  type="button"  onclick='EditPrice("@item.Id");' title="ویرایش"
+                                   class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--colored ">
+                                    <i class="material-icons">edit</i>
+                                </button>
+
+                            </td>
+                        </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<dialog class="mdl-dialog">
+
+</dialog>
+@section scripts{
+    <div class="load" style="text-align:center">
+        <img src="~/Content/Images/dayloading.gif" style="margin:0 auto;height:auto;width:300px;" />
+        <h5 style="color:#000000;line-height:30px">با تشکر از صبر و شکیبایی شما، درخواست شما در حال پیگیری است</h5>
+    </div>
+    
+    <div class="mask"></div>
+
+    <script>
+        var dialog = document.querySelector('dialog');
+        if (!dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+        }
+        function SubmitAddPrice() {
+            dialog.close();
+            $('.mask').fadeIn();
+            $('.load').fadeIn();
+            var formdata = new FormData(document.getElementById('FormAddPrice'));
+            $.ajax({
+                url: '@Url.Action(actionName:"_SubmitAddPrice",controllerName: "Products")',
+                type: "post",
+                data: formdata,
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.showModal();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+
+                        dialog.close();
+                        window.location.reload(true);
+                    });
+                },
+                complete: function () {
+                    $('.mask').hide();
+                    $('.load').hide();
+                }
+            });
+        }
+        function SubmitEditPrice() {
+            dialog.close();
+            $('.mask').fadeIn();
+            $('.load').fadeIn();
+            var formdata = new FormData(document.getElementById('FormEditPrice'));
+            $.ajax({
+                url: '@Url.Action(actionName:"_SubmitEditPrice",controllerName: "Products")',
+                type: "post",
+                data: formdata,
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.showModal();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+
+                        dialog.close();
+                        window.location.reload(true);
+                    });
+                },
+                complete: function () {
+                    $('.mask').hide();
+                    $('.load').hide();
+                }
+            });
+        }
+        function showDialog(id) {
+            this.event.preventDefault();
+            $('.mdl-dialog').html(fileUploader);
+            dialog.showModal();
+            document.getElementById("TEntity").value = "Product";
+            document.getElementById("valId").value = id;
+            document.getElementById("formFile").reset();
+            dialog.querySelector('.close').addEventListener('click', function () {
+                dialog.close();
+
+            });
+        }
+        function AddPrice(Id) {
+
+            $('.mask').fadeIn();
+            $('.load').fadeIn();
+            $.ajax({
+                url: '@Url.Action(actionName:"_AddPrice",controllerName: "Products")',
+                type: "post",
+                data: { id: Id },
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.showModal();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+                        dialog.close();
+
+                    });
+                },
+                complete: function () {
+                    $('.mask').hide();
+                    $('.load').hide();
+                }
+            });
+        }
+        function EditPrice(Id) {
+
+            $('.mask').fadeIn();
+            $('.load').fadeIn();
+            $.ajax({
+                url: '@Url.Action(actionName:"_EditPrice",controllerName: "Products")',
+                type: "post",
+                data: { id: Id },
+                dataType: "html",
+                success: function (result) {
+                    $('.mdl-dialog').html(result);
+                    componentHandler.upgradeAllRegistered();
+                    dialog.showModal();
+                    dialog.querySelector('.close').addEventListener('click', function () {
+                        dialog.close();
+
+                    });
+                },
+                complete: function () {
+                    $('.mask').hide();
+                    $('.load').hide();
+                }
+            });
+        }
+    </script>
+    }

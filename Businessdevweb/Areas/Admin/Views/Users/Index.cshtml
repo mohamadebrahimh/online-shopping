@@ -1,0 +1,221 @@
+﻿@model List<Businessdevweb.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "مدیریت کاربران";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Title -->
+<div class="row heading-bg pull-left rtl">
+
+    <!-- Breadcrumb -->
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+        <ol class="breadcrumb">
+            <li></li>
+            <li><a href="@Url.Action("Index","Dashboard",new { area = "Admin" })"><span>داشبورد</span></a></li>
+            <li class="active"><span>@ViewBag.Title</span></li>
+        </ol>
+    </div>
+    <!-- /Breadcrumb -->
+</div>
+<!-- /Title -->
+<!-- Row -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default card-view">
+            <div class="panel-heading">
+                <div class="pull-left">
+                    <h6 class="panel-title txt-dark">@ViewBag.Title</h6>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-wrapper collapse in">
+                <div class="panel-body">
+                    <div class="table-wrap">
+                        <div class="table-responsive">
+                            <table id="datable_1" class="table table-hover display  pb-30">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>تصویر</th>
+                                        <th>نام و نام خانوادگی</th>
+                                        <th>نام کاربری</th>
+                                        <th>تعداد سفارشات</th>
+                                        <th>عملیات</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @{ int count = 0;
+                                        foreach (var item in Model)
+                                        {
+                                            <tr id="tr@(item.Id)">
+                                                <td>@(++count)</td>
+                                                <td>
+
+                                                    <form class="ajaxForm" success-func="changeSuccess" id="form_Brand@(item.Id)" action="/Admin/Users/ChangePicture" data-autoReset="false" enctype="multipart/form-data" method="post">
+
+                                                        <input type="hidden" value="@item.Id" name="id" />
+
+
+                                                        <div style="width: 60px !important; height: 45px !important; display: block">
+
+
+                                                            <input data-show-loader="false" data-show-remove="false" type="file" name="file"
+                                                                   for="form_Brand@(item.Id)" class="dropify" data-default-file="@(item.ImageFile==null?"":"/Content/uploadFiles/Users/"+item.ImageFile)" />
+                                                            <input type="submit" id="form_Brand@(item.Id)_btn" style="display:none" />
+                                                        </div>
+                                                    </form>
+
+                                                </td>
+                                                <td>@item.FirstName @item.LastName</td>
+                                                <td>@item.UserName</td>
+                                                <td>
+                                                    @item.Orders.Count() سفارش
+                                                </td>
+                                                <td>
+                  
+   
+                                                    <a href="@Url.Action("Edit", "ProductCategories", new { area = "Admin", id = item.Id })" class="btn btn-primary btn-icon-anim btn-circle btn-sm" title="ویرایش @item.FirstName"><i class="glyphicon glyphicon-edit"></i></a>
+                                                    @if (item.Orders.Count <= 0&&item.Payments.Count <= 0)
+                                                    {
+                                                        <a action="/Users/Delete" data-area="Admin" data-id="@item.Id" success-func="deleteSuccess"
+                                                           ajax-alert="true" alert-cancel="نه، لغو بشه" data-method="post" alert-confirm="بله، حذف بشه"
+                                                           alert-title="حذف  @item.FirstName را تایید می کنید!" alert-type="warning"
+                                                           alert-text="در صورت تایید حذف،  @item.FirstName قابل بازیابی نمی باشد!"
+                                                           class="ajaxAction btn btn-danger btn-icon-anim btn-circle btn-sm" title="حذف @item.FirstName"><i class="glyphicon glyphicon-remove"></i></a>
+
+                                                    }
+
+
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Row -->
+@section Styles{
+    <!-- Data table CSS -->
+    <link href="~/Content/lib/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Bootstrap Dropify CSS -->
+    <link href="~/Content/lib/dropify/dist/css/dropify.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .file-icon:before {
+            margin: 0 !important;
+            padding: 0
+        }
+
+        .dropify-message {
+            -webkit-transform: translateY(0%) !important;
+            transform: translateY(0%) !important;
+        }
+    </style>
+    <link href="~/Content/lib/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css">
+}
+@section Scripts{
+    <script>
+
+    </script>
+    <script>
+
+    function deleteSuccess(data) {
+        debugger;
+            //examples
+            if (data.type == "success") {
+                $("#tr" + data.id).fadeOut();
+            } else {
+                return false;
+            }
+            return false;
+        }
+
+        function submited() {
+            $("#form_AddImageCategory").submit();
+        }
+    </script>
+
+    <!-- Data table JavaScript -->
+    <script src="~/Content/lib/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/js/dataTables-data.js"></script>
+    <!-- Bootstrap Daterangepicker JavaScript -->
+    <script src="~/Content/lib/dropify/dist/js/dropify.min.js"></script>
+
+    <!-- Form Flie Upload Data JavaScript -->
+    <script src="~/Content/js/form-file-upload-data.js"></script>
+    <script src="~/Content/lib/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="~/Content/js/AjaxHelper.js"></script>
+    <script>
+        $('.dropify').dropify({
+            tpl: {
+                wrap: '<div class="dropify-wrapper" style="padding:0; height:auto !important"></div>',
+                loader: '',
+                message: '<div class="dropify-message"><span class="file-icon" /></div>',
+                preview: '<div class="dropify-preview"><span class="dropify-render"></span></div>',
+                filename: '',
+                clearButton: '',
+                errorLine: '',
+                errorsContainer: ''
+            }
+        });
+
+    </script>
+    <script>
+        
+        function changeSuccess(data) {
+        
+            //examples
+            if (data.type == "success") {
+                swal({
+                    title: "آفرین!",
+                    type: "success",
+                    text: data.result,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            } else {
+                swal({
+                    title: "خطا!",
+                    type: "error",
+                    text: data.result,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+            return false;
+        }
+
+        var elements = document.querySelectorAll(".dropify[name=file]");
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].addEventListener("change",
+                function (eve) {
+
+
+
+                    let el = eve.currentTarget;
+                    let form = el.getAttribute("for");
+                    eve.preventDefault();
+                    document.getElementById(form + "_btn").click();
+
+                });
+        }
+
+
+
+
+    </script>
+}

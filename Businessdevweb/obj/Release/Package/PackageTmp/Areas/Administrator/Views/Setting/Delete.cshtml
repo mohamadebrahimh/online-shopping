@@ -1,0 +1,65 @@
+﻿
+@model Businessdevweb.Models.Setting
+
+@{
+    ViewBag.Title = "حذف تنظیمات " + Html.DisplayFor(model => model.Title);
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <div class="mdl-cell mdl-cell--12-col">
+                <h3>برای حذف تنطیمات (<span class="mdl-color-text--red"> @Html.DisplayFor(model => model.Title)</span> ) اطمینان دارید؟</h3>
+                <p>در صورتی که با حذف موافق هستید! <span class="mdl-color-text--red"> بدانید که قابلیت بازیابی اطلاعات مورد نظر وجود ندارد.</span></p>
+                <hr />
+            </div>
+            <div class="mdl-cell mdl-cell--12-col">
+                <h4 class="mdl-typography--title">
+
+                    <span> تعداد بنر آپلود شده برای این تنظیمات <span class="mdl-color-text--red">@Html.DisplayFor(model => model.BannerSliders.Count)</span> تصویر می باشد.</span>
+                </h4>
+            </div>
+            <dl class="mdl-cell mdl-cell--12-col">
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.MetaDescription)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.MetaDescription)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.MetaKeyword)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.MetaKeyword)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.MetaTag)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.MetaTag)
+                </dd>
+
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="mdl-cell mdl-cell--12-col">
+                    <input type="submit" value="تایید" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored " />
+                    <a href='@(Url.Action("Index"))' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">بازگشت </a>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+

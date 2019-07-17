@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>@ViewData["Title"]</title>
+
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Data table CSS -->
+    <link href="~/Content/lib/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    @RenderSection("Styles",false)
+    <!-- Custom CSS -->
+    <link href="~/Content/css/style.css"  rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <!--Preloader-->
+    <div class="preloader-it">
+        <div class="la-anim-1"></div>
+    </div>
+    <!--/Preloader-->
+    <div class="wrapper theme-5-active navbar-top-green">
+        <!-- Top Menu Items -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="mobile-only-brand pull-left">
+                <div class="nav-header pull-left">
+                    <div class="logo-wrap">
+                        <a href="index.html">
+                            <img class="brand-img" src="../img/logo.png" alt="brand" />
+                            <span class="brand-text">وب اپیکیشن</span>
+                        </a>
+                    </div>
+                </div>
+                <a id="toggle_nav_btn" class="toggle-left-nav-btn inline-block ml-20 pull-left" href="javascript:void(0);"><i class="ti-align-left"></i></a>
+                <a id="toggle_mobile_search" data-toggle="collapse" data-target="#search_form" class="mobile-only-view" href="javascript:void(0);"><i class="ti-search"></i></a>
+                <a id="toggle_mobile_nav" class="mobile-only-view" href="javascript:void(0);"><i class="ti-more"></i></a>
+                <form id="search_form" role="search" class="top-nav-search collapse pull-left">
+                    <div class="input-group">
+                        <input type="text" name="example-input1-group2" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn  btn-default" data-target="#search_form" data-toggle="collapse" aria-label="Close" aria-expanded="true"><i class="ti-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div id="mobile_only_nav" class="mobile-only-nav pull-right">
+                <ul class="nav navbar-right top-nav pull-right">
+                    <li class="dropdown auth-drp">
+                        <a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown"><img src="~/Content/assets/img/default-avatar.png" alt="user_auth" class="user-auth-img img-circle" /><span class="user-online-status"></span></a>
+                        <ul class="dropdown-menu user-auth-dropdown" data-dropdown-in="flipInX" data-dropdown-out="flipOutX">
+                            <li>
+                                <a href="@Url.Action("Index","Account",new {Area="" })"><i class="zmdi zmdi-account"></i><span>پروفایل</span></a>
+                            </li>
+
+
+                            <li>
+                                <a href="#"><i class="zmdi zmdi-settings"></i><span>تنظیمات حساب</span></a>
+                            </li>
+                            <li class="divider"></li>
+             
+                            <li class="divider"></li>
+                            <li>
+                                @if (User.Identity.IsAuthenticated)
+                                {<form action="@Url.Action("LogOff","Account")" method="post" id="logOff-form">
+                                        @Html.AntiForgeryToken()
+                                    </form> <a onclick="$('#logOff-form').submit();">
+                                        <i class="zmdi zmdi-power"></i> <span>خروج</span>
+                                    </a>
+                                }
+
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- /Top Menu Items -->
+        <!-- Left Sidebar Menu -->
+        <div class="fixed-sidebar-left">
+            <ul class="nav navbar-nav side-nav nicescroll-bar">
+                <li class="navigation-header">
+                    <span>اصلی</span>
+                    <hr />
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","Home",new { Area="Admin"})"><div class="pull-left"><i class="ti-dashboard  mr-20"></i><span class="right-nav-text">داشبورد</span></div><div class="clearfix"></div></a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","Users",new { Area="Admin"})"><div class="pull-left"><i class="ti-layout-accordion-list  mr-20"></i><span class="right-nav-text">مدیریت کاربران</span></div><div class="clearfix"></div></a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#product"><div class="pull-left"><i class="ti-shopping-cart-full  mr-20"></i><span class="right-nav-text">محصول</span></div><div class="pull-right"><i class="ti-angle-down"></i></div><div class="clearfix"></div></a>
+                    <ul id="product" class="collapse collapse-level-1">
+                        <li>
+                            <a href="@Url.Action("Index","ProductCategories",new { Area="Admin"})">دسته بندی محصولات</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Create","ProductCategories",new { Area="Admin"})">افزودن دسته</a>
+                        </li>
+
+
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ecom_dr"><div class="pull-left"><i class="ti-settings  mr-20"></i><span class="right-nav-text">تنظیمات</span></div><div class="pull-right"><i class="ti-angle-down"></i></div><div class="clearfix"></div></a>
+                    <ul id="ecom_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="@Url.Action("Setting","Home",new { Area="Admin"})">تنظیمات عمومی</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AboutMe","Home",new { Area="Admin"})">تنظیمات درباره ما</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ContactUs","Home",new { Area="Admin"})">تنظیمات ارتباط باما</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ecom_dr222"><div class="pull-left"><i class="ti-layout-slider  mr-20"></i><span class="right-nav-text">اسلایدر</span></div><div class="pull-right"><i class="ti-angle-down"></i></div><div class="clearfix"></div></a>
+                    <ul id="ecom_dr222" class="collapse collapse-level-1">
+                        <li>
+                            <a href="@Url.Action("Index","Sliders",new { Area="Admin"})">اسلایدر ها</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Create","Sliders",new { Area="Admin"})"> افزودن اسلایدر</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="page-wrapper">
+            <div class="container-fluid">
+
+
+                @RenderBody()
+                <!-- Footer -->
+                <footer class="footer container-fluid pl-30 pr-30">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p> کلیه حقوق مادی و معنوی این وب اپیکیشن متعلق به  است.</p>
+                        </div>
+                    </div>
+                </footer>
+                <!-- /Footer -->
+            </div>
+        </div>
+        <!-- /Main Content -->
+
+    </div>
+    <!-- /#wrapper -->
+    <!-- JavaScript -->
+    <!-- jQuery -->
+    <script src="~/Content/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/Content/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/jquery.slimscroll.js"></script>
+
+    @RenderSection("Scripts", false)
+
+    <!-- Init JavaScript -->
+    <script src="~/Content/js/init.js"></script>
+
+
+</body>
+
+</html>

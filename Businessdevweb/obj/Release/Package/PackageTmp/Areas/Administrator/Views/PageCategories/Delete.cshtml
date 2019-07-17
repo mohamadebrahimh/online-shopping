@@ -1,0 +1,94 @@
+﻿@model Businessdevweb.Models.PageCategory
+
+@{
+    ViewBag.Title = "حذف دسته " + Html.DisplayFor(model => model.Title);
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mdl-grid" >
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-grid mdl-color--grey-50">
+            <div class="mdl-cell mdl-cell--12-col">
+                <h3>برای حذف دسته (<span class="mdl-color-text--red"> @Html.DisplayFor(model => model.Title)</span> ) اطمینان دارید؟</h3>
+                <p>در صورتی که با حذف موافق هستید! <span class="mdl-color-text--red"> بدانید که قابلیت بازیابی اطلاعات مورد نظر وجود ندارد.</span></p>
+                <hr />
+            </div>
+            <div class="mdl-cell mdl-cell--12-col">
+                <h4 class="mdl-typography--title">
+                    تعداد زیر دسته های @Html.DisplayFor(model => model.Title): <span class="mdl-color-text--red">@Html.DisplayFor(model => model.Categories.Count)</span> دسته
+
+                    و @if (Model.ParentId == null)
+                    {
+                        <span>زیر دسته نمی باشد.</span>
+                    }
+                    else
+                    {
+                        <span>در دسته ای با نام <span class="mdl-color-text--red">@Html.DisplayFor(model => model.Parent.Title)</span> قرار دارد.</span>
+                    }
+                    <span> تعداد صفحاتی که در این دسته قرار گرفته است <span class="mdl-color-text--red">@Html.DisplayFor(model => model.Pages.Count)</span> صفحه می باشد.</span>
+                </h4>
+            </div>
+            <dl class="mdl-cell mdl-cell--12-col">
+                <dt class="mdl-typography--title">
+                    تعداد تصویر آپلود شده برای این دسته
+                </dt>
+
+                <dd class="mdl-typography--title mdl-color-text--red">
+                    @Html.DisplayFor(model => model.SelectedImages.Count)
+                </dd>
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.Visit)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.Visit)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.MetaDescription)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.MetaDescription)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.MetaKeyWord)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.MetaKeyWord)
+                </dd>
+
+                <dt class="mdl-typography--title">
+                    @Html.DisplayNameFor(model => model.Index)
+                </dt>
+
+                <dd class="mdl-color-text--red">
+                    @Html.DisplayFor(model => model.Index)
+                </dd>
+
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="mdl-cell mdl-cell--12-col">
+                    <input type="submit" value="تایید" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored " />
+                    <a href='@(Url.Action("Index"))' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">بازگشت </a>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
